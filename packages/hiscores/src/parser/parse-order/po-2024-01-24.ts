@@ -9,7 +9,7 @@ import {
 } from '../../models/hiscore.enum';
 import { ParseOrder } from './parse-order';
 
-/** Deadman: Apocalypse */
+/** Scurrius */
 export const PO_2024_01_24: ParseOrder = [
   SkillEnum.Overall,
   SkillEnum.Attack,
