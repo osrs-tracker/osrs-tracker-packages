@@ -9,7 +9,7 @@ import {
 } from '../../models/hiscore.enum';
 import { ParseOrder } from './parse-order';
 
-/** Varlamore P3 */
+/** Grid Master */
 export const PO_2025_10_15: ParseOrder = [
   SkillEnum.Overall,
   SkillEnum.Attack,
