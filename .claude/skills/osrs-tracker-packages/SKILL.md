@@ -30,7 +30,7 @@ this file at runtime, so keep rules here, not in the agent; repo-specific review
   `package.json`; a package's own go in its `package.json` (`npm install <pkg> -w packages/<name>`, from the root).
   There is one `package-lock.json`, at the root.
 - `.oxlintrc.json` at the root is every package's lint config (each `lint` script passes it with `-c`): oxlint until
-  typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143).
+  typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-packages#9).
 - A change a consumer has to follow (a bump, a breaking change) is an issue in that consumer's repo, not a change made
   from here.
 

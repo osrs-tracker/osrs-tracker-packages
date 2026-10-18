@@ -41,7 +41,7 @@ here.** It holds the versioning, publishing, changelog, review and release rules
   osrs-tracker-api `require`s the CJS build and osrs-tracker-web bundles the ESM one.
 - Root `package.json`: the workspace (in the order `models`, `hiscores`, `logger`, `express-metrics`) and the shared
   devDependencies; a package's own dependencies are in its `package.json`. `.oxlintrc.json`: every package's lint config
-  (oxlint until typescript-eslint supports TypeScript 7, osrs-tracker/osrs-tracker-aws#143).
+  (oxlint until typescript-eslint supports TypeScript 7, osrs-tracker/osrs-tracker-packages#9).
 - osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
   writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
   encoding.

@@ -2,7 +2,7 @@
 // osrs-tracker-aws's lambda/shared/.oxlintrc.json, the Lambdas' config, and is kept separately from it here.
 //
 // oxlint stands in for ESLint with typescript-eslint until typescript-eslint supports TypeScript 7
-// (osrs-tracker/osrs-tracker-aws#143): it parses
+// (osrs-tracker/osrs-tracker-packages#9): it parses
 // TypeScript itself, with no `typescript` dependency. Only the rules the ESLint config had, so the way back changes
 // nothing: oxlint's default `correctness` category is off, and ESLint's deprecated `no-return-await` has no oxlint
 // equivalent.
