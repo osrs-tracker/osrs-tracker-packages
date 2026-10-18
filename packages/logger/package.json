@@ -21,8 +21,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osrs-tracker/osrs-tracker-aws.git",
-    "directory": "@osrs-tracker/logger"
+    "url": "git+https://github.com/osrs-tracker/osrs-tracker-packages.git",
+    "directory": "packages/logger"
   },
   "engines": {
     "node": ">=22"
@@ -35,7 +35,7 @@
     "build:types": "tsc --declaration --emitDeclarationOnly --removeComments false --outDir dist/types",
     "prepublishOnly": "npm run build",
     "test": "vitest",
-    "lint": "oxlint -c ../../lambda/shared/.oxlintrc.json"
+    "lint": "oxlint -c ../../.oxlintrc.json"
   },
   "dependencies": {
     "pino": "^10.4.0",
@@ -52,10 +52,6 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^24.19.1",
-    "express": "^5.3.0",
-    "oxlint": "^1.88.0",
-    "typescript": "^7.0.2",
-    "vitest": "^5.0.3"
+    "express": "^5.3.0"
   }
 }

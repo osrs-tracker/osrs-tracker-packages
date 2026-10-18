@@ -1,4 +1,4 @@
-# @osrs-tracker/models &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/models.svg)](https://www.npmjs.com/package/@osrs-tracker/models) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-aws.svg)](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/LICENSE)
+# @osrs-tracker/models &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/models.svg)](https://www.npmjs.com/package/@osrs-tracker/models) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-packages.svg)](https://github.com/osrs-tracker/osrs-tracker-packages/blob/main/LICENSE)
 
 The shared TypeScript types for [OSRS Tracker](https://osrs-tracker.freekmencke.com): players, hiscores, items and news,
 plus the code that stores hiscore entries compactly. They're used by the website, the API and the background jobs, so
@@ -41,6 +41,9 @@ await players.updateOne({ username }, [
 
 const entries = decodeHiscoreEntries(player.hiscoreEntries, layoutsById); // newest first, as stored
 ```
+
+This package defines the encoding. Which job writes which `players` and `hiscoreLayouts` field, and owns which index, is
+in osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md).
 
 ### Reading entries
 

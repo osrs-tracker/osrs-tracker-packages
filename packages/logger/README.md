@@ -1,4 +1,4 @@
-# @osrs-tracker/logger &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/logger.svg)](https://www.npmjs.com/package/@osrs-tracker/logger) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-aws.svg)](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/LICENSE)
+# @osrs-tracker/logger &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/logger.svg)](https://www.npmjs.com/package/@osrs-tracker/logger) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-packages.svg)](https://github.com/osrs-tracker/osrs-tracker-packages/blob/main/LICENSE)
 
 Structured JSON logs for the Express and Nest servers of [OSRS Tracker](https://osrs-tracker.freekmencke.com), on
 [pino](https://getpino.io) and [pino-http](https://www.npmjs.com/package/pino-http). It replaces `morgan` and the

@@ -1,21 +1,29 @@
+## Unreleased
+
+- The source moved, with its history, from `@osrs-tracker/hiscores/` in osrs-tracker-aws to
+  [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/hiscores/`, roadmap
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+
 ## 5.0.0 - 2026-10-18
 
 - **Breaking:** no longer re-exports `ActivityEnum`, `SkillEnum`, `calculateXPForSkillLevel`, `calculateXPToNextLevel`,
   `levelForXp` and `XP_TABLE`, which moved to `@osrs-tracker/models` in 4.0.0: import them from `@osrs-tracker/models`,
-  already a peer dependency (issue #152). One import path per name, so consumers stop drifting between the two. hiscores
-  now exports only its own API: the clients, `fromJagex`, `hiscoreDiff`, `getOverallXpDiff` and their types. Still takes
-  `@osrs-tracker/models` `^2.4.0`.
-- Dev tooling only (issues #130 and #131, from the tech-debt roadmap #103): linted with the Lambdas' config
-  (`npm run lint`, also in CI), with oxlint instead of ESLint until typescript-eslint supports TypeScript 7 (#143). It
-  found nothing to fix; the build is unchanged.
-- Dev tooling only (issues #129 and #131, from the tech-debt roadmap #103): TypeScript `^7.0.2` (was `^5.9.3`), with
-  `bundler` module resolution and `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the
-  same.
-- Tests run on Vitest instead of Jest and ts-jest, like the other packages (issue #107, from the tech-debt roadmap
-  #103): ts-jest's TypeScript peer range ends before 7, and the specs imported the undeclared `@jest/globals`.
-  `tsconfig.spec.json` type-checks the specs, which Vitest doesn't. Tests only: the build and the API are unchanged.
+  already a peer dependency (issue osrs-tracker/osrs-tracker-aws#152). One import path per name, so consumers stop
+  drifting between the two. hiscores now exports only its own API: the clients, `fromJagex`, `hiscoreDiff`,
+  `getOverallXpDiff` and their types. Still takes `@osrs-tracker/models` `^2.4.0`.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
+  instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing
+  to fix; the build is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#129 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): TypeScript `^7.0.2` (was `^5.9.3`), with `bundler` module resolution and
+  `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the same.
+- Tests run on Vitest instead of Jest and ts-jest, like the other packages (issue osrs-tracker/osrs-tracker-aws#107,
+  from the tech-debt roadmap osrs-tracker/osrs-tracker-aws#103): ts-jest's TypeScript peer range ends before 7, and the
+  specs imported the undeclared `@jest/globals`. `tsconfig.spec.json` type-checks the specs, which Vitest doesn't. Tests
+  only: the build and the API are unchanged.
 - TypeScript `^5.9.3` (the build is byte-for-byte the same) and `vitest.config.mts`, which silences Vite's warning about
-  ESM syntax in a file loaded as CommonJS (issue #108).
+  ESM syntax in a file loaded as CommonJS (issue osrs-tracker/osrs-tracker-aws#108).
 
 ## 4.2.0 - 2026-10-13
 

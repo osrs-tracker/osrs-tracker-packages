@@ -1,13 +1,18 @@
 ## Unreleased
 
-- Dev tooling only (issues #130 and #131, from the tech-debt roadmap #103): linted with the Lambdas' config
-  (`npm run lint`, also in CI), with oxlint instead of ESLint until typescript-eslint supports TypeScript 7 (#143). It
-  found nothing to fix; the build is unchanged.
-- Dev tooling only (issues #129 and #131, from the tech-debt roadmap #103): TypeScript `^7.0.2` (was `^5.9.3`), with
-  `bundler` module resolution and `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the
-  same.
-- Dev tooling only (issue #108, from the tech-debt roadmap #103): TypeScript `^5.9.3` (the build is byte-for-byte the
-  same) and `vitest.config.mts`, which silences Vite's warning about ESM syntax in a file loaded as CommonJS.
+- The source moved, with its history, from `@osrs-tracker/express-metrics/` in osrs-tracker-aws to
+  [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/express-metrics/`, roadmap
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
+  instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing
+  to fix; the build is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#129 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): TypeScript `^7.0.2` (was `^5.9.3`), with `bundler` module resolution and
+  `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the same.
+- Dev tooling only (issue osrs-tracker/osrs-tracker-aws#108, from the tech-debt roadmap
+  osrs-tracker/osrs-tracker-aws#103): TypeScript `^5.9.3` (the build is byte-for-byte the same) and `vitest.config.mts`,
+  which silences Vite's warning about ESM syntax in a file loaded as CommonJS.
 
 ## 0.1.1 - 2026-10-09
 
