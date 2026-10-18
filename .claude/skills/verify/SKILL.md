@@ -20,16 +20,17 @@ workspace, so one install covers every package).
 
 It then runs every check at once (about 4 s), never stopping at a failure:
 
-1. Repo root: `npm run prettier:ci`
-2. Each package in `packages/`, from its folder: `npm run lint`, as its own check
-3. `models`: `npm run build`, and on its own `npx tsc -p tsconfig.spec.json && npx vitest run` (its `*.int.spec.ts`
-   tests start an in-memory MongoDB 8.0)
+1. Repo root: `npm run prettier:ci` and `npm run knip`
+2. Each package in `packages/`: `npm run lint -w packages/<name>`, as its own check
+3. `models`: `npm run build -w packages/models`, and on its own `npm run typecheck -w packages/models` and
+   `npx vitest run --project models` (its `*.int.spec.ts` tests start an in-memory MongoDB 8.0)
 4. Each other package, as one check in this order (its `npm run build` is `tsc`, so it type-checks):
-   - `hiscores`: `npm run build`, `npx tsc -p tsconfig.spec.json`, then `npx vitest run`. It builds and type-checks
-     against the local `models`, whose `exports` point at `dist/`, so it starts once `models`' build has finished.
-   - `logger`, `express-metrics`: `npm run build`, then `npx vitest run`
+   - `hiscores`: build, `typecheck`, then `npx vitest run --project hiscores`. It builds and type-checks against the
+     local `models`, whose `exports` point at `dist/`, so it starts once `models`' build has finished.
+   - `logger`, `express-metrics`: build, then `npx vitest run --project <name>`
 
-Never run `npm test`: it's watch mode in every package.
+Every check runs from the root: the Vitest projects are in the root `vitest.config.mts`. Never run `vitest` without
+`run`: it's watch mode.
 
 It prints each failed check's log (the last 60 lines of a long one, with the full log's path), then a `passed`/`FAILED`
 line per check with its folder, command and seconds, and exits 1 when any failed.

@@ -30,12 +30,16 @@ One npm workspace, with one lockfile at the root:
 
 ```bash
 npm ci
-npm run build -w packages/models
+npm run lint
+npm run build
+npm run typecheck
+npm test
 ```
 
-Then in a package's folder: `npm run lint && npx vitest run && npm run build` (`npm test` is watch mode), plus
-`npx tsc -p tsconfig.spec.json` in `hiscores` and `models`. `models`' `*.int.spec.ts` tests start an in-memory MongoDB
-8.0. At the root, `npm run prettier:ci` checks the formatting.
+Each runs every package, in workspace order (`models` first: `hiscores` builds against it). `npm test` runs one Vitest
+project per package; `npx vitest run --project models` runs one. `models`' `*.int.spec.ts` tests start an in-memory
+MongoDB 8.0. `npm run knip` reports unused files, dependencies and internal exports, and `npm run prettier:ci` checks
+the formatting.
 
 ## License
 

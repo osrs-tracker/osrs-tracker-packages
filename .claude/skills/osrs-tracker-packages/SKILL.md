@@ -25,7 +25,10 @@ this file at runtime, so keep rules here, not in the agent; repo-specific review
 
 - **npm publishes** are public and irreversible: get explicit go-ahead (a "release it" counts).
 - Every package ships `dist/cjs`, `dist/esm` and `dist/types`: osrs-tracker-api `require`s the CJS build and
-  osrs-tracker-web bundles the ESM one, so a build change must keep both loading. `dist/` isn't committed.
+  osrs-tracker-web bundles the ESM one, so a build change must keep both loading. `dist/` isn't committed. Every
+  package's `build` is `scripts/build-package.sh` (its arguments go to the types build), from its `tsconfig.json`, which
+  extends the root `tsconfig.base.json` and keeps only the package's differences.
+- `src/index.ts` is a package's public API and exports by name: a new public function or type is added there.
 - Dependencies: the shared devDependencies (TypeScript, oxlint, Prettier, Vitest, `@types/node`) live in the root
   `package.json`; a package's own go in its `package.json` (`npm install <pkg> -w packages/<name>`, from the root).
   There is one `package-lock.json`, at the root.
@@ -91,19 +94,22 @@ Wait for a 200 from `https://registry.npmjs.org/@osrs-tracker%2f<pkg>/<version>`
 
 ## Verify
 
-The `verify` skill runs all of this at once for every package. By hand, from the package folder (or with
-`-w packages/<name>` from the root), after `npm ci` once at the root:
+The `verify` skill runs all of this at once for every package. By hand, from the root after `npm ci` once there:
+`npm run lint && npm run build && npm run typecheck && npm test && npm run knip && npm run prettier:ci`. Each runs every
+package in workspace order; for one, pass `-w packages/<name>` to the npm scripts and use
+`npx vitest run --project <name>`.
 
-- `models`, `hiscores`: `npm run lint && npx vitest run && npx tsc -p tsconfig.spec.json && npm run build` (Vitest
-  doesn't type-check; models' `*.int.spec.ts` tests start an in-memory MongoDB 8.0 with `mongodb-memory-server`, whose
-  binary the Vitest `globalSetup` `packages/models/src/mongodb.global-setup.ts` downloads once)
-- `logger`, `express-metrics`: `npm run lint && npx vitest run && npm run build` (`npm test` is watch mode in every
-  package)
+- `npm run typecheck` runs `tsc -p tsconfig.spec.json` in `hiscores` and `models`: Vitest doesn't type-check.
+- `npm test` is `vitest run`: one project per package in the root `vitest.config.mts`. models' `*.int.spec.ts` tests
+  start an in-memory MongoDB 8.0 with `mongodb-memory-server`, whose binary the models project's `globalSetup`
+  (`packages/models/src/mongodb.global-setup.ts`) downloads once.
 - `hiscores` builds and type-checks against the local `models`, whose `exports` point at `dist/`: build `models` first.
-- Repo root: `npm run prettier:ci`
+- `npm run knip` (`knip.jsonc`) reports unused files, dependencies and internal exports. It counts each package's
+  `src/index.ts` exports as used, so it doesn't flag public exports no consumer imports: check those against the
+  consumers' code before removing one.
 
-CI checks every package on every push: lint, Vitest, the spec type check, the build, and a load check that packs each
-package and loads it with `require` and `import`; plus Prettier and an offline link check.
+CI checks every package on every push: the same root scripts, and a load check that packs each package and loads it with
+`require` and `import`; plus Prettier and an offline link check.
 
 ## Review rules
 

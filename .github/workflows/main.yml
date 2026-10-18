@@ -56,42 +56,32 @@ jobs:
           path: ~/.cache/mongodb-binaries
           key: mongodb-binaries-${{ runner.os }}-${{ runner.arch }}-${{ steps.mongodb.outputs.version }}
 
-      # In workspace order: hiscores builds and type-checks against the local models, whose exports point at dist/, so
-      # models is built first. Vitest doesn't type-check, and the build's tsconfig covers only src/index.ts, hence
-      # tsconfig.spec.json. The load check loads each build with require and import, also from the packed tarball
-      - name: models
-        working-directory: packages/models
-        run: |
-          npm run lint
-          npx vitest run
-          npx tsc -p tsconfig.spec.json
-          npm run build
-          ../../.github/scripts/check-package-loads.sh
+      # Unused files, dependencies and internal exports (knip.jsonc); the packages' public exports count as used
+      - name: knip
+        run: npm run knip
 
-      - name: hiscores
-        working-directory: packages/hiscores
-        run: |
-          npm run lint
-          npx vitest run
-          npx tsc -p tsconfig.spec.json
-          npm run build
-          ../../.github/scripts/check-package-loads.sh
+      # The root scripts run every package in workspace order: hiscores builds and type-checks against the local
+      # models, whose exports point at dist/, so models is built first
+      - name: Lint
+        run: npm run lint
 
-      - name: logger
-        working-directory: packages/logger
-        run: |
-          npm run lint
-          npx vitest run
-          npm run build
-          ../../.github/scripts/check-package-loads.sh
+      - name: Build
+        run: npm run build
 
-      - name: express-metrics
-        working-directory: packages/express-metrics
+      # Vitest doesn't type-check, and the build's tsconfig covers only src/index.ts, hence tsconfig.spec.json
+      - name: Type-check the specs
+        run: npm run typecheck
+
+      # Every package's specs, one Vitest project each (vitest.config.mts)
+      - name: Test
+        run: npm test
+
+      # Loads each build with require and import, also from the packed tarball, as the consumers do
+      - name: Load check
         run: |
-          npm run lint
-          npx vitest run
-          npm run build
-          ../../.github/scripts/check-package-loads.sh
+          for dir in $(jq -r '.workspaces[]' package.json); do
+            (cd "$dir" && ../../.github/scripts/check-package-loads.sh)
+          done
 
   # Local links and #anchors in every Markdown file, on every push. --offline skips external URLs, --hidden includes
   # .claude/; .gitignored files (node_modules, dist) are skipped
