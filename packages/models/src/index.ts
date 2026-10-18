@@ -22,14 +22,7 @@ export type { PlayerCount } from './models/player-count.js';
 export type { PlayerCountDay } from './models/player-count-day.js';
 export { PLAYER_COUNT_RANGES } from './models/player-count-history.js';
 export type { PlayerCountPoint, PlayerCountRange } from './models/player-count-history.js';
-export {
-  MAX_SKILL_LEVEL,
-  XP_TABLE,
-  calculateXPForSkillLevel,
-  calculateXPToNextLevel,
-  levelForXp,
-  percentageToNextLevel,
-} from './xp/levels.js';
+export { MAX_SKILL_LEVEL, calculateXPForSkillLevel, calculateXPToNextLevel } from './xp/levels.js';
 export {
   UnknownHiscoreLayoutError,
   decodeHiscoreEntries,
@@ -38,5 +31,5 @@ export {
 } from './hiscores/codec.js';
 export { createHiscoreLayout, layoutId } from './hiscores/layout.js';
 export { hiscoreEntriesWriteExpression, stripUnchangedValues } from './hiscores/write-expression.js';
-export { UNTRAINED_LEVEL, overallOf, skillLevel, skillProgress } from './hiscores/values.js';
+export { overallOf, skillLevel, skillProgress } from './hiscores/values.js';
 export type { SkillProgress } from './hiscores/values.js';

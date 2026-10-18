@@ -59,9 +59,8 @@ names, and a name Jagex adds is stored before the enums know it, so the enums li
 `PlayerType` and `PlayerStatus` are a `Player`'s `type` (`normal`, `ironman`, …) and `status` (`default`, `de_ironed`,
 `de_ultimated`).
 
-`XP_TABLE[level]` is the total xp a level needs, from 1 to 126; `calculateXPForSkillLevel(level)` returns the same and
-keeps applying the formula above 126. `calculateXPToNextLevel(xp, level)` and `percentageToNextLevel(xp, level)` measure
-progress into a level, and `levelForXp(xp)` returns the level, capped at `MAX_SKILL_LEVEL` (99).
+`calculateXPForSkillLevel(level)` is the total xp a level needs, also past level 126, and
+`calculateXPToNextLevel(xp, level)` the xp left to the next level. `MAX_SKILL_LEVEL` is 99.
 
 ## Development
 

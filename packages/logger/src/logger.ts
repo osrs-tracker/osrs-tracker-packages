@@ -8,7 +8,7 @@ import { pino, stdTimeFunctions, type DestinationStream, type LevelWithSilent, t
  * - `lifecycle`: startup and shutdown
  * - `uncaught`: an error that reached the app's error handler
  */
-export const LOG_TYPES = ['incoming', 'outgoing', 'lifecycle', 'uncaught'] as const;
+const LOG_TYPES = ['incoming', 'outgoing', 'lifecycle', 'uncaught'] as const;
 
 /** A line's `type`. An app adds its own with `LogType<'prerender'>`. */
 export type LogType<Extra extends string = never> = (typeof LOG_TYPES)[number] | Extra;

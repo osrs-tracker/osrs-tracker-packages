@@ -5,7 +5,6 @@ import {
   encodeHiscoreEntry,
   HiscoreEntry,
   HiscoreLayout,
-  levelForXp,
   stripUnchangedValues,
 } from '@osrs-tracker/models';
 import { readFileSync } from 'fs';
@@ -17,6 +16,9 @@ const raw: Record<string, JagexHiscoreJson> = JSON.parse(
   readFileSync(join(__dirname, 'fixtures/jagex-hiscores.json'), 'utf8'),
 );
 
+/** The level for 1,500 xp, the new skill's xp in the newer response. */
+const NEW_SKILL_LEVEL = 11;
+
 /** A response from after Jagex added a skill and an activity that no enum knows yet. */
 function withNewNames(json: JagexHiscoreJson, gained: number): JagexHiscoreJson {
   return {
@@ -27,7 +29,7 @@ function withNewNames(json: JagexHiscoreJson, gained: number): JagexHiscoreJson 
         id: 99,
         name: 'Some New Skill',
         rank: -1,
-        level: gained ? levelForXp(500 + gained) : 1,
+        level: gained ? NEW_SKILL_LEVEL : 1,
         xp: gained ? 500 + gained : -1,
       },
     ],
@@ -57,7 +59,7 @@ describe('fromJagex → encode → decode → hiscoreDiff', () => {
 
     const diff = hiscoreDiff(decodedNewer, decodedOlder);
     // no xp before: level 1, rank 0
-    expect(diff.skills['Some New Skill']).toEqual({ rank: 0, level: levelForXp(1_500) - 1, xp: 1_500 });
+    expect(diff.skills['Some New Skill']).toEqual({ rank: 0, level: NEW_SKILL_LEVEL - 1, xp: 1_500 });
     expect(diff.activities['Some New Boss']).toEqual({ rank: 0, score: 1_000 });
     expect(getOverallXpDiff(decodedNewer, decodedOlder)).toBe(0);
   });

@@ -1,8 +1,11 @@
-## Unreleased
+## 0.3.0 - 2026-10-18
 
+- **Breaking:** no longer exports `LOG_TYPES`, `requestLogLevel` and the `RequestLogLevel` type. No consumer imported
+  them (checked 2026-10-18). The built-in log types and request levels are unchanged, and `LogType` still lists them
+  (issue osrs-tracker/osrs-tracker-packages#5).
 - The source moved, with its history, from `@osrs-tracker/logger/` in osrs-tracker-aws to
   [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/logger/`, roadmap
-  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there.
 - Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
   roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
   instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing

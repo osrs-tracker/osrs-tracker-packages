@@ -1,8 +1,11 @@
-## Unreleased
+## 0.2.0 - 2026-10-18
 
+- **Breaking:** no longer re-exports `Histogram` and `Summary` from `@prometheus-io/client`. No consumer imported them
+  (checked 2026-10-18); an app that needs one imports it from `@prometheus-io/client` itself. `Counter`, `Gauge`,
+  `register` and `Registry` are still re-exported (issue osrs-tracker/osrs-tracker-packages#5).
 - The source moved, with its history, from `@osrs-tracker/express-metrics/` in osrs-tracker-aws to
   [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/express-metrics/`, roadmap
-  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there.
 - Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
   roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
   instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing
