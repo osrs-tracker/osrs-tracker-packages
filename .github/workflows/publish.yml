@@ -1,0 +1,58 @@
+name: Publish
+
+# Stages one package's current package.json version on npm, by hand from main (Actions > Publish, or
+# `gh workflow run publish.yml --ref main -f package=<name>`). Trusted publishing: npm swaps the job's OIDC token for a
+# short-lived one, so no npm token is stored, and the version gets a provenance attestation. Each package's trusted
+# publisher allows only `npm stage publish`: nothing is released until a maintainer approves the staged version on npm
+# with 2FA, so a compromised workflow can't release by itself (osrs-tracker/osrs-tracker-packages#6).
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to stage
+        required: true
+        type: choice
+        options: [models, hiscores, logger, express-metrics]
+
+permissions: {}
+
+jobs:
+  stage:
+    name: Stage ${{ inputs.package }}
+    # Only main's code is published, after CI has checked it
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      # The OIDC token npm exchanges
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Node 24 ships npm 11.15.0 or later, which `npm stage` needs
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+          registry-url: https://registry.npmjs.org
+          # No cache in a job that can publish: a poisoned cache would ship in the tarball
+          package-manager-cache: false
+
+      - name: Install
+        run: npm ci
+        env:
+          MONGOMS_DISABLE_POSTINSTALL: '1'
+
+      # hiscores builds against the local models, whose exports point at dist/
+      - name: Build models
+        run: npm run build -w packages/models
+
+      # Runs the package's prepublishOnly (its build) first, like npm publish
+      - name: Stage
+        working-directory: packages/${{ inputs.package }}
+        run: npm stage publish

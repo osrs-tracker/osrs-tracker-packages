@@ -68,10 +68,17 @@ tests against that instead.
 
 ## Publishing
 
-`npm publish` in the package directory (or `npm publish -w packages/<name>` from the root). 2FA's browser flow fails
-from a non-interactive shell (`EOTP`): ask the user for a fresh OTP and run `npm publish --otp=<code>` immediately, or
-let them publish. `prepublishOnly` runs the package's build, and hiscores' build needs `models`' `dist/`: build `models`
-first (`npm run build -w packages/models`).
+The `Publish` workflow (`.github/workflows/publish.yml`) stages a package's current `package.json` version from `main`
+with trusted publishing, so the version carries provenance: `gh workflow run publish.yml --ref main -f package=<name>`,
+then `gh run watch <id> --exit-status`. A staged version isn't released until the user approves it with 2FA (on
+npmjs.com, or `npm stage list` then `npm stage approve <stage-id>` in their terminal); OIDC can't approve, and npm's
+malware scan (about five minutes) runs first. Ask the user to approve, then wait for the registry 200 below. Only merged
+code can be published, so merge before publishing.
+
+Each package's trusted publisher allows `npm stage publish` only (the user sets it, with 2FA:
+`npm trust github @osrs-tracker/<name> --file publish.yml --repo osrs-tracker/osrs-tracker-packages --allow-stage-publish`).
+A new package needs its first version published by hand before it can have one. When the workflow can't run, the user
+publishes by hand (`npm publish` in the package directory, with an OTP), which carries no provenance.
 
 Order:
 
@@ -132,23 +139,26 @@ agent.
 
 ## Release ("release it", "ship it")
 
-Run the whole flow without asking between steps; stop only on failure. The request is the go-ahead to publish what the
-change touches. Verify locally once before committing; after that CI is the gate (the build a publish runs still runs).
+Run the whole flow without asking between steps; stop only on failure, and when a staged version waits for the user's
+approval. The request is the go-ahead to publish what the change touches. Verify locally once before committing; after
+that CI is the gate (the build a publish runs still runs).
 
-1. Commit on a `<type>/<short-name>` branch, push, `gh pr create --base main`.
+1. Commit on a `<type>/<short-name>` branch, including hiscores' peer range change (Publishing, step 2), push,
+   `gh pr create --base main`.
 2. Review `gh pr diff` for bugs and leftovers while the `conventions-reviewer` agent checks the PR (spawn it without a
    `model`, which would override its Sonnet pin). Its first line is a `VERDICT:`; check each finding against the code
    before fixing it and drop the ones that don't hold. Fix both and push.
-3. Once CI passes, publish the changed packages in the order above and check each one's registry 200.
-4. Commit any follow-up bump (a widened peer range), push, and record what shipped and the check results in the PR
-   description. Open the consumer issues (Publishing, step 3) and link them from the PR.
-5. Once checks pass: `gh pr merge <n> --merge`, switch to `main`, pull, `git branch -d <branch>`, `git fetch --prune`.
+3. Once checks pass: `gh pr merge <n> --merge`, switch to `main`, pull, `git branch -d <branch>`, `git fetch --prune`.
+4. Once `main`'s CI passes, stage the changed packages with the `Publish` workflow in the order above, ask the user to
+   approve each, and check each one's registry 200 before staging the next.
+5. Record what shipped and the check results in a PR comment. Open the consumer issues (Publishing, step 3) and link
+   them from the PR.
 
 ## Commit and push
 
 - Doc-only changes (as `CLAUDE.md` defines them) go straight to `main`. Otherwise, outside a release, **ask every
   time**: `main` or a PR. The admin account bypasses `main`'s PR rule; after a direct push,
-  `gh run watch --exit-status`. After a PR merges, do release step 5's cleanup.
+  `gh run watch --exit-status`. After a PR merges, do release step 3's cleanup.
 - PRs need the `CI` and `zizmor` checks, up to date with `main` (the `main` ruleset). The same ruleset blocks a merge on
   CodeQL code scanning alerts of high severity or higher, or of `error` level: fix the alert, or dismiss it with a
   reason in the Security tab, and never copy an open alert's details into an issue, PR, commit or `CHANGELOG.md` (it's a
@@ -157,7 +167,8 @@ change touches. Verify locally once before committing; after that CI is the gate
   (seen on #10; GitHub doesn't document it), so the PR stays BLOCKED with no `CodeQL` check. Once `CI` and `zizmor` pass
   and `gh pr checks <n>` lists no `CodeQL`, merge with `gh pr merge <n> --merge --admin`. `--admin` skips every rule, so
   never use it while a check fails or is pending (osrs-tracker/osrs-tracker-packages#11).
-- Publishing from a PR branch ships unmerged code: tell the user. Commit and push in the same session as any publish.
+- A hand publish from a PR branch ships unmerged code: tell the user. Commit and push in the same session as any
+  publish.
 - Conventional commits. Scopes: `models`, `hiscores`, `logger`, `express-metrics`, `ci(actions)`, `docs(skill)`, `chore`
   (repo-wide tooling and config).
 - **Changelog entries**: which changes get one, and where, is in `CLAUDE.md`. Root days are `## YYYY-MM-DD`, newest
