@@ -1,0 +1,55 @@
+# osrs-tracker-packages
+
+The four `@osrs-tracker/*` npm packages in `packages/<name>/`, one npm workspace with one root lockfile: `models` (the
+shared data types and the stored hiscore encoding), `hiscores` (fetches and maps Jagex's hiscores; `models` is its
+peer), `logger` and `express-metrics`. The osrs-tracker-aws Lambdas use `models` and `hiscores`; osrs-tracker-api and
+osrs-tracker-web use all four, from npm. Sibling repos: `../osrs-tracker-aws`, `../osrs-tracker-api` and
+`../osrs-tracker-web`. **This repo is public.**
+
+**Load the `osrs-tracker-packages` skill before writing, reviewing, versioning, publishing or committing anything
+here.** It holds the versioning, publishing, changelog, review and release rules. Keep detail there, not in this file.
+
+## Commands
+
+- Once per checkout, at the root: `npm ci`. Worktrees in `.claude/worktrees/` need their own: one workspace, so one
+  install covers all four packages (the pre-push hook needs it too).
+- Verify a package, from its folder (or `-w packages/<name>` from the root): `npm run lint`, `npx vitest run`,
+  `npx tsc -p tsconfig.spec.json` where that file exists (`hiscores`, `models`), `npm run build`. `npm test` is watch
+  mode. Build `models` first: `hiscores` builds and type-checks against the local `models`, whose `exports` point at
+  `dist/`. models' `*.int.spec.ts` tests start an in-memory MongoDB 8.0. Repo root: `npm run prettier:ci`.
+- The `verify` skill's `.claude/skills/verify/verify.sh` runs all of these for every package at once, in one call;
+  Claude Code runs it before each commit.
+
+## Hard rules
+
+- Never write secrets, tokens, account, resource or ruleset IDs into code, docs, issues or commits.
+- npm publishes are public and irreversible: get an explicit go-ahead (a "release it" counts). Publishing stays manual,
+  with an OTP.
+- Every change except a doc-only one gets a changelog entry: CI, tooling (`.claude/hooks/`, `.claude/settings.json`) and
+  repo-level config in the root `CHANGELOG.md` under today's `## YYYY-MM-DD`, newest first; package changes in the
+  package's own `CHANGELOG.md` (`## Unreleased`, or `## X.Y.Z - YYYY-MM-DD` with a release). Doc-only means `README.md`
+  files (the root's or a package's), `CLAUDE.md`, `.claude/skills/` and `.claude/agents/`. A dependency bump gets an
+  entry only when it changes behaviour (a new feature used, a fix that matters, a breaking change handled).
+- Doc-only changes go straight to `main`; for anything else, ask: `main` or a PR (unless releasing). Never
+  `--no-gpg-sign`.
+
+## Where things live
+
+- `packages/<name>/`: `src/` (`index.ts` is the public API), `CHANGELOG.md`, `README.md`, and a copy of the root
+  `LICENSE` and `NOTICE` (Apache-2.0). `dist/` is built on publish (`prepublishOnly`) and not committed; `files` limits
+  the tarball to `dist/`, `CHANGELOG.md` and `NOTICE`. Each ships `dist/cjs`, `dist/esm` and `dist/types`:
+  osrs-tracker-api `require`s the CJS build and osrs-tracker-web bundles the ESM one.
+- Root `package.json`: the workspace (in the order `models`, `hiscores`, `logger`, `express-metrics`) and the shared
+  devDependencies; a package's own dependencies are in its `package.json`. `.oxlintrc.json`: every package's lint config
+  (oxlint until typescript-eslint supports TypeScript 7, osrs-tracker/osrs-tracker-aws#143).
+- osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
+  writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
+  encoding.
+- `.github/workflows/main.yml`: CI checks every package on every push (lint, tests, type check, build, and a load check
+  that packs each package and loads it with `require` and `import`), plus Prettier and an offline link check, after one
+  `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s `zizmor` (audits the workflows;
+  `.github/zizmor.yml` says what it allows).
+- `.claude/agents/conventions-reviewer.md` reviews diffs against the skill and this file;
+  `.claude/hooks/read-only-bash.sh` keeps it to git, gh and grep reads. `.claude/settings.json` runs Prettier on every
+  file Claude edits, and `.claude/hooks/pre-push-check.sh` blocks `git push` (also `git -C <path> push`) when Prettier
+  or a package's lint fails in the checkout being pushed.
