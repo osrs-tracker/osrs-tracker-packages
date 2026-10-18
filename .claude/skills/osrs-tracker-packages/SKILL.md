@@ -153,6 +153,10 @@ change touches. Verify locally once before committing; after that CI is the gate
   CodeQL code scanning alerts of high severity or higher, or of `error` level: fix the alert, or dismiss it with a
   reason in the Security tab, and never copy an open alert's details into an issue, PR, commit or `CHANGELOG.md` (it's a
   vulnerability report in a public repo).
+- That rule also blocks a PR CodeQL never analysed: default setup skips a PR that changes no JS/TS or workflow file
+  (seen on #10; GitHub doesn't document it), so the PR stays BLOCKED with no `CodeQL` check. Once `CI` and `zizmor` pass
+  and `gh pr checks <n>` lists no `CodeQL`, merge with `gh pr merge <n> --merge --admin`. `--admin` skips every rule, so
+  never use it while a check fails or is pending (osrs-tracker/osrs-tracker-packages#11).
 - Publishing from a PR branch ships unmerged code: tell the user. Commit and push in the same session as any publish.
 - Conventional commits. Scopes: `models`, `hiscores`, `logger`, `express-metrics`, `ci(actions)`, `docs(skill)`, `chore`
   (repo-wide tooling and config).
