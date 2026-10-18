@@ -75,10 +75,14 @@ npmjs.com, or `npm stage list` then `npm stage approve <stage-id>` in their term
 malware scan (about five minutes) runs first. Ask the user to approve, then wait for the registry 200 below. Only merged
 code can be published, so merge before publishing.
 
-Each package's trusted publisher allows `npm stage publish` only (the user sets it, with 2FA:
-`npm trust github @osrs-tracker/<name> --file publish.yml --repo osrs-tracker/osrs-tracker-packages --allow-stage-publish`).
-A new package needs its first version published by hand before it can have one. When the workflow can't run, the user
-publishes by hand (`npm publish` in the package directory, with an OTP), which carries no provenance.
+Each package's trusted publisher allows `npm stage publish` only. npm drops one that isn't used within 2 days of being
+created, so a run that fails to authenticate usually means it expired: check with `npm trust list @osrs-tracker/<name>`.
+To recreate it, ask the user for a fresh OTP and run this at once, for every package that needs it (one code covers
+several calls within its window):
+`npm trust github @osrs-tracker/<name> --file publish.yml --repo osrs-tracker/osrs-tracker-packages --allow-stage-publish --otp=<code> -y`.
+Never pass `--allow-publish`. A new package needs its first version published by hand before it can have one. When the
+workflow can't run, the user publishes by hand (`npm publish` in the package directory, with an OTP), which carries no
+provenance.
 
 Order:
 
