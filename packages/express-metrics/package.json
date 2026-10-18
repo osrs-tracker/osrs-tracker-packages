@@ -21,8 +21,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osrs-tracker/osrs-tracker-aws.git",
-    "directory": "@osrs-tracker/express-metrics"
+    "url": "git+https://github.com/osrs-tracker/osrs-tracker-packages.git",
+    "directory": "packages/express-metrics"
   },
   "engines": {
     "node": ">=22"
@@ -35,7 +35,7 @@
     "build:types": "tsc --declaration --emitDeclarationOnly --removeComments false --outDir dist/types",
     "prepublishOnly": "npm run build",
     "test": "vitest",
-    "lint": "oxlint -c ../../lambda/shared/.oxlintrc.json"
+    "lint": "oxlint -c ../../.oxlintrc.json"
   },
   "dependencies": {
     "@prometheus-io/client": "^0.16.1",
@@ -52,11 +52,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^24.13.6",
     "@types/on-finished": "^2.3.5",
-    "express": "^5.2.1",
-    "oxlint": "^1.88.0",
-    "typescript": "^7.0.2",
-    "vitest": "^5.0.3"
+    "express": "^5.2.1"
   }
 }

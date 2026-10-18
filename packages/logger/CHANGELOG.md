@@ -1,15 +1,20 @@
 ## Unreleased
 
-- Dev tooling only (issues #130 and #131, from the tech-debt roadmap #103): linted with the Lambdas' config
-  (`npm run lint`, also in CI), with oxlint instead of ESLint until typescript-eslint supports TypeScript 7 (#143). It
-  found nothing to fix; the build is unchanged.
-- Dev tooling only (issues #129 and #131, from the tech-debt roadmap #103): TypeScript `^7.0.2` (was `^5.9.3`), with
-  `bundler` module resolution and `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the
-  same except `dist/types/logger.d.ts`, which writes the `LOG_TYPES` tuple type with single quotes: the same type.
+- The source moved, with its history, from `@osrs-tracker/logger/` in osrs-tracker-aws to
+  [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/logger/`, roadmap
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
+  instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing
+  to fix; the build is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#129 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): TypeScript `^7.0.2` (was `^5.9.3`), with `bundler` module resolution and
+  `rootDir: "src"`, the options TypeScript 7 requires. The build is byte-for-byte the same except
+  `dist/types/logger.d.ts`, which writes the `LOG_TYPES` tuple type with single quotes: the same type.
 - README: the Nest section says Nest has to run on its Express adapter (Nest 11 or later, for the Express 5 peer
   dependency).
-- Dev tooling only (issue #108): `vitest.config.mts`, which silences Vite's warning about ESM syntax in a file loaded as
-  CommonJS.
+- Dev tooling only (issue osrs-tracker/osrs-tracker-aws#108): `vitest.config.mts`, which silences Vite's warning about
+  ESM syntax in a file loaded as CommonJS.
 
 ## 0.2.0 - 2026-10-09
 

@@ -1,0 +1,36 @@
+{
+  "name": "osrs-tracker-packages",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Freek Mencke",
+    "email": "freek_mencke.dev@outlook.com",
+    "url": "https://freekmencke.com"
+  },
+  "prettier": "./.prettierrc.json",
+  "repository": {
+    "type": "git",
+    "url": "github:osrs-tracker/osrs-tracker-packages"
+  },
+  "workspaces": [
+    "packages/models",
+    "packages/hiscores",
+    "packages/logger",
+    "packages/express-metrics"
+  ],
+  "scripts": {
+    "prettier": "prettier --write .",
+    "prettier:ci": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "oxlint": "^1.88.0",
+    "prettier": "^3.5.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  },
+  "allowScripts": {
+    "mongodb-memory-server@11.3.0": true
+  }
+}

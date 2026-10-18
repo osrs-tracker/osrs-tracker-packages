@@ -1,5 +1,8 @@
 ## Unreleased
 
+- The source moved, with its history, from `@osrs-tracker/models/` in osrs-tracker-aws to
+  [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/models/`, roadmap
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
 - Dev tooling only: a Vitest `globalSetup` downloads the in-memory MongoDB binary once, before the spec files start. The
   two `*.int.spec.ts` files each downloaded it in their own fork on a fresh CI runner, and mongodb-memory-server's
   check-then-write download lock let both through: the second rename failed and that spec's `beforeAll` timed out
@@ -10,23 +13,27 @@
 - `PLAYER_COUNT_RANGES` (`as const`), `PlayerCountRange` and `PlayerCountPoint`: the ranges of osrs-tracker-api's
   `GET /player-counts?range=` and one point of the history it returns (a sample, or an hourly or daily average, with
   `peak` on daily points). Moved here from osrs-tracker-api and osrs-tracker-web, which each defined them by hand (issue
-  #151).
+  osrs-tracker/osrs-tracker-aws#151).
 - `StoredNewsItem` (`OsrsNewsItem` with `description` and `enclosure` optional, for the backfilled posts) and
-  `NewsArchivePage` (`GET /news/archive`'s `{ posts, next }`), moved here from the same two copies (issue #151).
-- Dev tooling only (issue #145): `allowScripts` approves `mongodb-memory-server@11.3.0`'s install script, which
-  downloads the MongoDB binary for the tests. npm 12 skips unapproved dependency scripts; without it the first test run
-  downloads the binary instead and can time out. Pinned to the version, so an update re-approves it
-  (`npm install-scripts approve mongodb-memory-server`). The published code is unchanged.
-- Dev tooling only (issues #130 and #131, from the tech-debt roadmap #103): linted with the Lambdas' config
-  (`npm run lint`, also in CI), with oxlint instead of ESLint until typescript-eslint supports TypeScript 7 (#143). It
-  found nothing to fix; the build is unchanged.
-- Dev tooling only (issues #129 and #131, from the tech-debt roadmap #103): TypeScript `^7.0.2` (was `^5.9.3`), with
-  `bundler` module resolution and `rootDir: "src"`, the options TypeScript 7 requires. The JavaScript and `.d.ts` files
-  are byte-for-byte the same; the CommonJS source maps and `codec.d.ts.map` map some lines differently.
-- Dev tooling only (issue #108, from the tech-debt roadmap #103): TypeScript `^5.9.3` instead of an exact 5.8.2 pin (the
-  build is byte-for-byte the same), `mongodb-memory-server` 11 for the in-memory MongoDB 8.0.12 tests, and
-  `vitest.config.mts`, which silences Vite's warning about ESM syntax in a file loaded as CommonJS. New specs cover
-  `calculateXPForSkillLevel` above level 126 and for a non-integer level (it counts up to the next whole level).
+  `NewsArchivePage` (`GET /news/archive`'s `{ posts, next }`), moved here from the same two copies (issue
+  osrs-tracker/osrs-tracker-aws#151).
+- Dev tooling only (issue osrs-tracker/osrs-tracker-aws#145): `allowScripts` approves `mongodb-memory-server@11.3.0`'s
+  install script, which downloads the MongoDB binary for the tests. npm 12 skips unapproved dependency scripts; without
+  it the first test run downloads the binary instead and can time out. Pinned to the version, so an update re-approves
+  it (`npm install-scripts approve mongodb-memory-server`). The published code is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#130 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): linted with the Lambdas' config (`npm run lint`, also in CI), with oxlint
+  instead of ESLint until typescript-eslint supports TypeScript 7 (osrs-tracker/osrs-tracker-aws#143). It found nothing
+  to fix; the build is unchanged.
+- Dev tooling only (issues osrs-tracker/osrs-tracker-aws#129 and osrs-tracker/osrs-tracker-aws#131, from the tech-debt
+  roadmap osrs-tracker/osrs-tracker-aws#103): TypeScript `^7.0.2` (was `^5.9.3`), with `bundler` module resolution and
+  `rootDir: "src"`, the options TypeScript 7 requires. The JavaScript and `.d.ts` files are byte-for-byte the same; the
+  CommonJS source maps and `codec.d.ts.map` map some lines differently.
+- Dev tooling only (issue osrs-tracker/osrs-tracker-aws#108, from the tech-debt roadmap
+  osrs-tracker/osrs-tracker-aws#103): TypeScript `^5.9.3` instead of an exact 5.8.2 pin (the build is byte-for-byte the
+  same), `mongodb-memory-server` 11 for the in-memory MongoDB 8.0.12 tests, and `vitest.config.mts`, which silences
+  Vite's warning about ESM syntax in a file loaded as CommonJS. New specs cover `calculateXPForSkillLevel` above level
+  126 and for a non-integer level (it counts up to the next whole level).
 
 ## 2.5.0 - 2026-10-14
 
