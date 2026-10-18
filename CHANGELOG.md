@@ -6,6 +6,10 @@ repo's history; doc-only changes are not.
 
 ## 2026-10-18
 
+- Publishing: a `Publish` workflow, run by hand from `main`, stages a package's version on npm with trusted publishing
+  (OIDC, no stored npm token), so releases carry provenance and need no OTP in a shell. Each package's trusted publisher
+  allows staging only, so nothing is released until a maintainer approves it on npm with 2FA. Build tool (`tsc`) and
+  Dependabot (actions only, no npm updates) stay as they are (issue osrs-tracker/osrs-tracker-packages#6).
 - CI: one workflow checks every package on each push (lint, Vitest, spec type-check, build, and a load check of the
   packed tarball with `require` and `import`), plus Prettier, a local link check and zizmor, with Dependabot keeping the
   action refs current, so the packages keep the checks they had in osrs-tracker-aws (issue

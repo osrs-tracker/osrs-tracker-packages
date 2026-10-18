@@ -25,8 +25,8 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 ## Hard rules
 
 - Never write secrets, tokens, account, resource or ruleset IDs into code, docs, issues or commits.
-- npm publishes are public and irreversible: get an explicit go-ahead (a "release it" counts). Publishing stays manual,
-  with an OTP.
+- npm publishes are public and irreversible: get an explicit go-ahead (a "release it" counts). The `Publish` workflow
+  stages a version from `main`; it goes out only once the user approves it on npm with 2FA.
 - Every change except a doc-only one gets a changelog entry: CI, tooling (`.claude/hooks/`, `.claude/settings.json`) and
   repo-level config in the root `CHANGELOG.md` under today's `## YYYY-MM-DD`, newest first; package changes in the
   package's own `CHANGELOG.md` (`## Unreleased`, or `## X.Y.Z - YYYY-MM-DD` with a release). Doc-only means `README.md`
@@ -52,7 +52,8 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 - `.github/workflows/main.yml`: CI checks every package on every push (lint, tests, type check, build, and a load check
   that packs each package and loads it with `require` and `import`), plus Prettier and an offline link check, after one
   `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s `zizmor` (audits the workflows;
-  `.github/zizmor.yml` says what it allows).
+  `.github/zizmor.yml` says what it allows). `publish.yml` (run by hand) stages one package on npm with trusted
+  publishing.
 - `.claude/agents/conventions-reviewer.md` reviews diffs against the skill and this file;
   `.claude/hooks/read-only-bash.sh` keeps it to git, gh and grep reads. `.claude/settings.json` runs Prettier on every
   file Claude edits, and `.claude/hooks/pre-push-check.sh` blocks `git push` (also `git -C <path> push`) when Prettier
