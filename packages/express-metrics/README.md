@@ -34,5 +34,5 @@ Options: `metricsPath` (default `/metrics`), `registry` (default the global `reg
 don't register the metrics twice) and `defaultMetrics` (default `true`). Keep `normalizePath` low-cardinality: route
 patterns, not usernames or IDs.
 
-The package re-exports `register`, `Registry`, `Counter`, `Gauge`, `Histogram` and `Summary`, so an app can add its own
-metrics to the same registry. Create them after `metricsMiddleware`, which clears the registry.
+The package re-exports `register`, `Registry`, `Counter` and `Gauge`, so an app can add its own metrics to the same
+registry. Create them after `metricsMiddleware`, which clears the registry.

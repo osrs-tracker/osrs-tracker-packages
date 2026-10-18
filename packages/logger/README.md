@@ -23,7 +23,7 @@ npm install @osrs-tracker/logger
 
 The base pino logger. `context` returns fields for every line, e.g. the page being rendered or the request ID
 (`undefined` ones are left out). `level` defaults to `info`, `destination` to stdout. Log through a child with a `type`,
-so every line has one. `LOG_TYPES` lists the built-in types: `incoming`, `outgoing`, `lifecycle` and `uncaught`.
+so every line has one. The built-in types are `incoming`, `outgoing`, `lifecycle` and `uncaught`.
 
 ```ts
 import { createLogger, type LogType } from '@osrs-tracker/logger';
@@ -74,10 +74,10 @@ app.use(
 }
 ```
 
-`requestLogLevel(status, aborted)` sets the level: 5xx `error`, 4xx `warn`, else `info`. A request the client closed
-before the headers were sent is a `warn` with `aborted: true` and no `status`, timed until the connection closed.
-`responseTime` runs until the response finished, in whole milliseconds (pino-http's timing). `context` is read when the
-request starts, so its fields are on the line even though it's written after the request's async context has ended.
+The level follows the status: 5xx `error`, 4xx `warn`, else `info`. A request the client closed before the headers were
+sent is a `warn` with `aborted: true` and no `status`, timed until the connection closed. `responseTime` runs until the
+response finished, in whole milliseconds (pino-http's timing). `context` is read when the request starts, so its fields
+are on the line even though it's written after the request's async context has ended.
 
 ### `logOutgoingRequests({ logger })`
 

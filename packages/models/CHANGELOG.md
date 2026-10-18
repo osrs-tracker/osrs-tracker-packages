@@ -1,8 +1,13 @@
-## Unreleased
+## 3.0.0 - 2026-10-18
 
+- **Breaking:** no longer exports `XP_TABLE`, `levelForXp`, `percentageToNextLevel` and `UNTRAINED_LEVEL`. No consumer
+  imported them (osrs-tracker-aws, osrs-tracker-api and osrs-tracker-web, checked 2026-10-18); they stay inside the
+  package, behind `calculateXPForSkillLevel`, `calculateXPToNextLevel`, `skillLevel` and `skillProgress`, which are what
+  to use instead. `src/index.ts` now exports by name, so a helper another module imports no longer becomes public by
+  accident (roadmap osrs-tracker/osrs-tracker-aws#154, issue osrs-tracker/osrs-tracker-packages#5).
 - The source moved, with its history, from `@osrs-tracker/models/` in osrs-tracker-aws to
   [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/models/`, roadmap
-  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there.
 - Dev tooling only: a Vitest `globalSetup` downloads the in-memory MongoDB binary once, before the spec files start. The
   two `*.int.spec.ts` files each downloaded it in their own fork on a fresh CI runner, and mongodb-memory-server's
   check-then-write download lock let both through: the second rename failed and that spec's `beforeAll` timed out

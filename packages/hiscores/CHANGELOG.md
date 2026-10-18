@@ -1,8 +1,11 @@
-## Unreleased
+## 6.0.0 - 2026-10-18
 
+- **Breaking:** no longer exports `WORLD_LIST_URL`. No consumer imported it (checked 2026-10-18); `fetchWorldList` still
+  fetches that URL. `src/index.ts` now exports by name (issue osrs-tracker/osrs-tracker-packages#5).
+- Takes `@osrs-tracker/models` `^2.4.0 || ^3.0.0`: it uses none of the exports models 3.0.0 removed.
 - The source moved, with its history, from `@osrs-tracker/hiscores/` in osrs-tracker-aws to
   [osrs-tracker-packages](https://github.com/osrs-tracker/osrs-tracker-packages) (`packages/hiscores/`, roadmap
-  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there. The published code is unchanged.
+  osrs-tracker/osrs-tracker-aws#154), and the `repository` field points there.
 
 ## 5.0.0 - 2026-10-18
 

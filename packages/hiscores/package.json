@@ -1,6 +1,6 @@
 {
   "name": "@osrs-tracker/hiscores",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Helpers for OSRS hiscores and the world list: a hiscore client, a player count from the world list, the mapping from Jagex's JSON and snapshot diffs",
   "license": "Apache-2.0",
   "author": "Freek Mencke",
@@ -31,9 +31,9 @@
     "lint": "oxlint -c ../../.oxlintrc.json"
   },
   "peerDependencies": {
-    "@osrs-tracker/models": "^2.4.0"
+    "@osrs-tracker/models": "^2.4.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@osrs-tracker/models": "^2.4.0"
+    "@osrs-tracker/models": "^3.0.0"
   }
 }
