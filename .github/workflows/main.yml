@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+  workflow_dispatch:
+
+# Read-only unless a job asks for more: build and test run code from every installed package, so they get a token that
+# can't push or approve pull requests, whatever the repository's default is
+permissions:
+  contents: read
+
+jobs:
+  # Every package on every push: four small packages don't need change detection. One job, so one npm ci for the whole
+  # workspace
+  packages:
+    name: Prettier and packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+          # Caches ~/.npm by the root package-lock.json
+          cache: npm
+
+      - name: Install
+        run: npm ci
+        env:
+          # The postinstall fetches mongodb-memory-server's default MongoDB, which no spec runs: models' Vitest
+          # globalSetup downloads the version they do
+          MONGOMS_DISABLE_POSTINSTALL: '1'
+
+      - name: Prettier
+        run: npm run prettier:ci
+
+      - name: Read the MongoDB version
+        id: mongodb
+        run: |
+          version=$(grep -oP "MONGODB_VERSION = '\K[^']+" packages/models/src/mongodb.global-setup.ts)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      # models' *.int.spec.ts start an in-memory MongoDB; its binary is about 200 MB
+      - name: Cache the MongoDB binary
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/mongodb-binaries
+          key: mongodb-binaries-${{ runner.os }}-${{ runner.arch }}-${{ steps.mongodb.outputs.version }}
+
+      # In workspace order: hiscores builds and type-checks against the local models, whose exports point at dist/, so
+      # models is built first. Vitest doesn't type-check, and the build's tsconfig covers only src/index.ts, hence
+      # tsconfig.spec.json. The load check loads each build with require and import, also from the packed tarball
+      - name: models
+        working-directory: packages/models
+        run: |
+          npm run lint
+          npx vitest run
+          npx tsc -p tsconfig.spec.json
+          npm run build
+          ../../.github/scripts/check-package-loads.sh
+
+      - name: hiscores
+        working-directory: packages/hiscores
+        run: |
+          npm run lint
+          npx vitest run
+          npx tsc -p tsconfig.spec.json
+          npm run build
+          ../../.github/scripts/check-package-loads.sh
+
+      - name: logger
+        working-directory: packages/logger
+        run: |
+          npm run lint
+          npx vitest run
+          npm run build
+          ../../.github/scripts/check-package-loads.sh
+
+      - name: express-metrics
+        working-directory: packages/express-metrics
+        run: |
+          npm run lint
+          npx vitest run
+          npm run build
+          ../../.github/scripts/check-package-loads.sh
+
+  # Local links and #anchors in every Markdown file, on every push. --offline skips external URLs, --hidden includes
+  # .claude/; .gitignored files (node_modules, dist) are skipped
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: --offline --include-fragments --hidden --no-progress './**/*.md'
+          fail: true
+          jobSummary: false
+
+  # The required check (zizmor.yml's zizmor is the other): fails when any job failed or was cancelled
+  ci:
+    name: CI
+    if: always()
+    needs: [packages, links]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: All checks passed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
