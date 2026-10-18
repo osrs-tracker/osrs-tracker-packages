@@ -28,13 +28,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "build:esm": "tsc --module ESNext --outDir dist/esm && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
-    "build:types": "tsc --declaration --emitDeclarationOnly --removeComments false --outDir dist/types",
+    "build": "../../scripts/build-package.sh --removeComments false",
     "prepublishOnly": "npm run build",
-    "test": "vitest",
     "lint": "oxlint -c ../../.oxlintrc.json"
   },
   "dependencies": {

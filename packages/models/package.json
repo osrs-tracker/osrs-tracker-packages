@@ -26,13 +26,9 @@
     "directory": "packages/models"
   },
   "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "build:esm": "tsc --module ESNext --outDir dist/esm && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
-    "build:types": "tsc --declaration --declarationMap --emitDeclarationOnly --outDir dist/types",
+    "build": "../../scripts/build-package.sh --declarationMap",
+    "typecheck": "tsc -p tsconfig.spec.json",
     "prepublishOnly": "npm run build",
-    "test": "vitest",
     "lint": "oxlint -c ../../.oxlintrc.json"
   },
   "devDependencies": {

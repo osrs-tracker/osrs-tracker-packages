@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Runs every verify check: the root Prettier check, and lint, build, type check and tests for every package in the
-# workspace, all at once (none stops at another's failure). Only a package that builds against the local models
+# Runs every verify check: the root Prettier and knip checks, and lint, build, type check and tests for every package in
+# the workspace, all at once (none stops at another's failure). Only a package that builds against the local models
 # (hiscores) waits, for models' build. Then prints each failed check's log and a summary line per check. Exits 1 when
 # any check failed. Run from the checkout's root; it takes no options.
 set -u
@@ -18,26 +18,29 @@ names=() dirs=() commands=() waits=()
 add() { names+=("$1") dirs+=("$2") commands+=("$3") waits+=("${4:-}"); }
 
 add prettier . 'npm run prettier:ci'
+# Unused files, dependencies and internal exports (knip.jsonc); the packages' public exports count as used
+add knip . 'npm run knip'
 
-# The workspace order in the root package.json: models, hiscores, logger, express-metrics
+# The workspace order in the root package.json: models, hiscores, logger, express-metrics. Every check runs from the
+# root: Vitest's projects are in the root vitest.config.mts
 for dir in $(jq -r '.workspaces[]' package.json); do
   name=${dir##*/}
-  add "$name lint" "$dir" 'npm run lint'
-  # Vitest doesn't type-check; tsconfig.spec.json type-checks the specs where a package has one. Never `npm test`: it's
-  # watch mode.
-  test='npx vitest run'
-  [ -f "$dir/tsconfig.spec.json" ] && test="npx tsc -p tsconfig.spec.json && $test"
+  add "$name lint" . "npm run lint -w $dir"
+  # Vitest doesn't type-check; `typecheck` (tsconfig.spec.json) type-checks the specs where a package has one. Never
+  # `vitest` without `run`: it's watch mode.
+  test="npx vitest run --project $name"
+  jq -e '.scripts.typecheck' "$dir/package.json" >/dev/null && test="npm run typecheck -w $dir && $test"
   if [ "$name" = models ]; then
     # Split, so hiscores waits only for the build, not for models' in-memory MongoDB tests
     models_build=${#names[@]}
-    add 'models build' "$dir" 'npm run build'
-    add 'models test' "$dir" "$test"
+    add 'models build' . "npm run build -w $dir"
+    add 'models test' . "$test"
   elif jq -e '.devDependencies["@osrs-tracker/models"]' "$dir/package.json" >/dev/null; then
     # Builds and type-checks against the local models, whose exports point at its dist/
-    add "$name build+test" "$dir" "npm run build && $test" wait
+    add "$name build+test" . "npm run build -w $dir && $test" wait
   else
     # The tests use what the build checks first
-    add "$name build+test" "$dir" "npm run build && $test"
+    add "$name build+test" . "npm run build -w $dir && $test"
   fi
 done
 

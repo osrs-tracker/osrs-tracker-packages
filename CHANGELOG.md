@@ -15,3 +15,10 @@ repo's history; doc-only changes are not.
   formatting and lint errors are caught before CI. The conventions reviewer is limited to git, gh and grep reads. The
   oxlint config's note now points at this repo's ESLint-return issue, osrs-tracker/osrs-tracker-packages#9 (issue
   osrs-tracker/osrs-tracker-packages#3).
+- Simpler package setup, with the published output unchanged: one `tsconfig.base.json` that each package's
+  `tsconfig.json` extends, one `scripts/build-package.sh` for every `build`, one root `vitest.config.mts` with a project
+  per package (models keeps its MongoDB `globalSetup`), and root `lint`, `build`, `typecheck` and `test` scripts that CI
+  and the verify skill run. `models` and `hiscores` export by name from `src/index.ts`, so a helper another module
+  imports no longer becomes public by accident; the public API is the same. knip (`npm run knip`, in CI and the verify
+  skill) reports unused files, dependencies and internal exports; it found none (issue
+  osrs-tracker/osrs-tracker-packages#4).

@@ -1,0 +1,18 @@
+{
+  // The compiler options every package shares; each packages/<name>/tsconfig.json extends it and keeps only its
+  // differences. ${configDir} is the extending tsconfig's folder, so the paths stay per package.
+  "files": ["${configDir}/src/index.ts"],
+  "compilerOptions": {
+    "declaration": false,
+    "outDir": "${configDir}/dist",
+    "rootDir": "${configDir}/src",
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "lib": ["es2022"],
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true
+  }
+}

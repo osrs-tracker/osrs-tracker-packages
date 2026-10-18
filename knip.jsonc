@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  // Each package's src/index.ts is its public API: knip counts its exports as used, so it reports unused files,
+  // dependencies and internal exports, not the public exports consumers might not use (osrs-tracker-packages#5 checks
+  // those against the consumers' code)
+  "workspaces": {
+    ".": {},
+    "packages/*": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.ts"],
+    },
+  },
+}
