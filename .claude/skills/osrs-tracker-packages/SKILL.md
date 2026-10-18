@@ -13,7 +13,7 @@ Four npm packages in `packages/<name>/`, one npm workspace with one root lockfil
 `models` and `hiscores`; osrs-tracker-api and osrs-tracker-web use all four. Those repos (`../osrs-tracker-aws`,
 `../osrs-tracker-api`, `../osrs-tracker-web`) have their own skills.
 
-**This repo is public.** Never write secrets, tokens, account, resource or ruleset IDs into code, docs or commits.
+**This repo is public.** `CLAUDE.md`'s hard rules say what never goes into code, docs, issues or commits.
 
 Load when needed: osrs-tracker-aws's
 [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md) (who writes which
@@ -119,8 +119,8 @@ package in workspace order; for one, pass `-w packages/<name>` to the npm script
   `src/index.ts` exports as used, so it doesn't flag public exports no consumer imports: check those against the
   consumers' code before removing one.
 
-CI checks every package on every push: the same root scripts, and a load check that packs each package and loads it with
-`require` and `import`; plus Prettier and an offline link check.
+CI checks every package on every push to `main` and every PR: the same root scripts, and a load check that packs each
+package and loads it with `require` and `import`; plus Prettier and an offline link check.
 
 ## Review rules
 
@@ -160,8 +160,10 @@ that CI is the gate (the build a publish runs still runs).
 
 ## Commit and push
 
-- Doc-only changes (as `CLAUDE.md` defines them) go straight to `main`. Otherwise, outside a release, **ask every
-  time**: `main` or a PR. The admin account bypasses `main`'s PR rule; after a direct push,
+- Doc-only changes (as `CLAUDE.md` defines them) go straight to `main`, without the verify skill. CI's link check fails
+  `main` on a broken local link or `#anchor`, so run it first on the tracked files (a glob would also check
+  `node_modules`): `lychee --offline --include-fragments $(git ls-files '*.md')`. Otherwise, outside a release, **ask
+  every time**: `main` or a PR. The admin account bypasses `main`'s PR rule; after a direct push,
   `gh run watch --exit-status`. After a PR merges, do release step 3's cleanup.
 - PRs need the `CI` and `zizmor` checks, up to date with `main` (the `main` ruleset). The same ruleset blocks a merge on
   CodeQL code scanning alerts of high severity or higher, or of `error` level: fix the alert, or dismiss it with a

@@ -32,6 +32,7 @@ import {
   decodeHiscoreEntries,
   encodeHiscoreEntry,
   hiscoreEntriesWriteExpression,
+  hiscoreLayoutIds,
 } from '@osrs-tracker/models';
 
 const layout = createHiscoreLayout(names, new Date()); // upsert it in `hiscoreLayouts` before the entry
@@ -39,8 +40,15 @@ await players.updateOne({ username }, [
   { $set: { hiscoreEntries: hiscoreEntriesWriteExpression(encodeHiscoreEntry(entry, layout)) } },
 ]);
 
+// The layouts the entries use, in order of first use
+const ids = hiscoreLayoutIds(player.hiscoreEntries);
+const layouts = await hiscoreLayouts.find({ _id: { $in: ids } }).toArray();
+const layoutsById = new Map(layouts.map((layout) => [layout._id, layout]));
 const entries = decodeHiscoreEntries(player.hiscoreEntries, layoutsById); // newest first, as stored
 ```
+
+`decodeHiscoreEntries` throws an `UnknownHiscoreLayoutError` for a layout id missing from the map: load that layout and
+decode again.
 
 This package defines the encoding. Which job writes which `players` and `hiscoreLayouts` field, and owns which index, is
 in osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md).

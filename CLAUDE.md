@@ -27,11 +27,12 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 - Never write secrets, tokens, account, resource or ruleset IDs into code, docs, issues or commits.
 - npm publishes are public and irreversible: get an explicit go-ahead (a "release it" counts). The `Publish` workflow
   stages a version from `main`; it goes out only once the user approves it on npm with 2FA.
-- Every change except a doc-only one gets a changelog entry: CI, tooling (`.claude/hooks/`, `.claude/settings.json`) and
-  repo-level config in the root `CHANGELOG.md` under today's `## YYYY-MM-DD`, newest first; package changes in the
-  package's own `CHANGELOG.md` (`## Unreleased`, or `## X.Y.Z - YYYY-MM-DD` with a release). Doc-only means `README.md`
-  files (the root's or a package's), `CLAUDE.md`, `.claude/skills/` and `.claude/agents/`. A dependency bump gets an
-  entry only when it changes behaviour (a new feature used, a fix that matters, a breaking change handled).
+- Every change except a doc-only one gets a changelog entry: CI, tooling (`.claude/hooks/`, `.claude/settings.json`,
+  scripts such as `.claude/skills/verify/verify.sh`) and repo-level config in the root `CHANGELOG.md` under today's
+  `## YYYY-MM-DD`, newest first; package changes in the package's own `CHANGELOG.md` (`## Unreleased`, or
+  `## X.Y.Z - YYYY-MM-DD` with a release). Doc-only means `README.md` files (the root's or a package's), `CLAUDE.md`,
+  and the Markdown files in `.claude/skills/` and `.claude/agents/`. A dependency bump gets an entry only when it
+  changes behaviour (a new feature used, a fix that matters, a breaking change handled).
 - Doc-only changes go straight to `main`; for anything else, ask: `main` or a PR (unless releasing). Never
   `--no-gpg-sign`.
 
@@ -49,11 +50,11 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 - osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
   writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
   encoding.
-- `.github/workflows/main.yml`: CI checks every package on every push (lint, tests, type check, build, and a load check
-  that packs each package and loads it with `require` and `import`), plus Prettier and an offline link check, after one
-  `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s `zizmor` (audits the workflows;
-  `.github/zizmor.yml` says what it allows). `publish.yml` (run by hand) stages one package on npm with trusted
-  publishing.
+- `.github/workflows/main.yml`: CI checks every package on every push to `main` and every PR (lint, tests, type check,
+  build, and a load check that packs each package and loads it with `require` and `import`), plus Prettier and an
+  offline link check, after one `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s `zizmor`
+  (audits the workflows; `.github/zizmor.yml` says what it allows). `publish.yml` (run by hand) stages one package on
+  npm with trusted publishing.
 - `.claude/agents/conventions-reviewer.md` reviews diffs against the skill and this file;
   `.claude/hooks/read-only-bash.sh` keeps it to git, gh and grep reads. `.claude/settings.json` runs Prettier on every
   file Claude edits, and `.claude/hooks/pre-push-check.sh` blocks `git push` (also `git -C <path> push`) when Prettier

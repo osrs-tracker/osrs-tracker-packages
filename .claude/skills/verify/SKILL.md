@@ -24,7 +24,8 @@ It then runs every check at once (about 4 s), never stopping at a failure:
 2. Each package in `packages/`: `npm run lint -w packages/<name>`, as its own check
 3. `models`: `npm run build -w packages/models`, and on its own `npm run typecheck -w packages/models` and
    `npx vitest run --project models` (its `*.int.spec.ts` tests start an in-memory MongoDB 8.0)
-4. Each other package, as one check in this order (its `npm run build` is `tsc`, so it type-checks):
+4. Each other package, as one check in this order (its `npm run build` is `scripts/build-package.sh`, which runs `tsc`,
+   so it type-checks):
    - `hiscores`: build, `typecheck`, then `npx vitest run --project hiscores`. It builds and type-checks against the
      local `models`, whose `exports` point at `dist/`, so it starts once `models`' build has finished.
    - `logger`, `express-metrics`: build, then `npx vitest run --project <name>`
