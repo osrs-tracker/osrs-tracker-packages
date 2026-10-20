@@ -1,3 +1,9 @@
+## 3.1.0 - 2026-10-20
+
+- `ActivityEnum.TheFracturedArchive` (`'The Fractured Archive'`), the raid Jagex added to the hiscores on 2026-10-20.
+  Entries for it are already stored and served by name since hiscores 4.0.0; the member is for code that refers to it,
+  such as the web's raid layout.
+
 ## 3.0.0 - 2026-10-18
 
 - **Breaking:** no longer exports `XP_TABLE`, `levelForXp`, `percentageToNextLevel` and `UNTRAINED_LEVEL`. No consumer
