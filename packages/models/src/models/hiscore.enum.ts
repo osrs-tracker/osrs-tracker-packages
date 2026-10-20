@@ -62,6 +62,7 @@ export enum ActivityEnum {
   TheatreOfBloodHardMode = 'Theatre of Blood: Hard Mode',
   TombsOfAmascut = 'Tombs of Amascut',
   TombsOfAmascutExpertMode = 'Tombs of Amascut: Expert Mode',
+  TheFracturedArchive = 'The Fractured Archive', // New raid 20/10/2026
 
   // BOSSES
   AbyssalSire = 'Abyssal Sire',
