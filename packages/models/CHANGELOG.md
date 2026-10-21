@@ -1,3 +1,18 @@
+## 3.2.0 - 2026-10-21
+
+- `ScrapeResultMessage` (`HiscoresResultMessage` or `PlayerCountResultMessage`, with `ScrapedHiscore`): what the
+  scraping Lambdas will send to the SQS FIFO results queue instead of writing MongoDB, for osrs-tracker-api's ingester
+  to apply (roadmap osrs-tracker/osrs-tracker-aws#162, issue osrs-tracker/osrs-tracker-packages#16). Versioned with
+  `v: 1`. A `hiscores` message is one process-players job: `scrapedAt`, `scrapingOffset`, each found player's hiscore
+  and layout names as `getHiscore` returns them, and the usernames not on the hiscores. It holds raw results, not
+  encoded entries or Mongo operations, because a message can wait 14 days across a change of the stored format, and
+  dates as ISO strings, as `JSON.parse` returns them. Ten players with every value at its widest come to about 76 KB,
+  well under SQS's 1 MiB (a spec checks it).
+- `PlayerSubscription`: one item of the DynamoDB subscriptions table, `{ username, scrapingOffsets }`, which the
+  ingester's sync writes and queue-players reads. `scrapingOffsets` is a `Set<number>`, not the `number[]` the issue
+  proposed: `@aws-sdk/lib-dynamodb` writes a Number Set only from a `Set` (an array becomes a List) and reads one back
+  as a `Set`.
+
 ## 3.1.0 - 2026-10-20
 
 - `ActivityEnum.TheFracturedArchive` (`'The Fractured Archive'`), the raid Jagex added to the hiscores on 2026-10-20.

@@ -59,6 +59,13 @@ A value is `null` when there's no xp or score; don't make up a value for it. Sho
 `skillLevel(entry.skills[name])` (1), or its level, xp and progress with `skillProgress(entry.skills[name])`, read
 Overall with `overallOf(entry)`, and iterate a `HiscoreDiff` with `Object.entries`: its values are never `null`.
 
+### Scrape results queue
+
+`ScrapeResultMessage` is what the scraping jobs send to the results queue, as JSON: a `hiscores` message per scrape job
+(raw hiscores, not stored entries) or a `playerCount` sample. Its dates are ISO strings; convert them with `new Date()`
+before storing. Check `v` before applying one: a message with an unknown version is left on the queue.
+`PlayerSubscription` is one item of the subscriptions table the scraping jobs read.
+
 ### Enums and XP
 
 `SkillEnum` and `ActivityEnum` hold skill and activity names exactly as the `name` in Jagex's JSON hiscores
