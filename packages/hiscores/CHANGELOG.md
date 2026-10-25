@@ -1,3 +1,8 @@
+## Unreleased
+
+- The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
+  osrs-tracker/osrs-tracker-packages#19).
+
 ## 6.0.0 - 2026-10-18
 
 - **Breaking:** no longer exports `WORLD_LIST_URL`. No consumer imported it (checked 2026-10-18); `fetchWorldList` still

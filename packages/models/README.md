@@ -1,9 +1,9 @@
 # @osrs-tracker/models &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/models.svg)](https://www.npmjs.com/package/@osrs-tracker/models) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-packages.svg)](https://github.com/osrs-tracker/osrs-tracker-packages/blob/main/LICENSE)
 
-The shared TypeScript types for [OSRS Tracker](https://osrs-tracker.freekmencke.com): players, hiscores, items and news,
-plus the code that stores hiscore entries compactly. They're used by the website, the API and the background jobs, so
-all of them agree on the shape of the data. Works with both ES modules and CommonJS, in Node and the browser, with no
-runtime dependencies.
+The shared TypeScript types for [OSRS Tracker](https://osrs-tracker.net): players, hiscores, items and news, plus the
+code that stores hiscore entries compactly. They're used by the website, the API and the background jobs, so all of them
+agree on the shape of the data. Works with both ES modules and CommonJS, in Node and the browser, with no runtime
+dependencies.
 
 ## Install
 

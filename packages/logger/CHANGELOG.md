@@ -1,3 +1,8 @@
+## Unreleased
+
+- The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
+  osrs-tracker/osrs-tracker-packages#19).
+
 ## 0.3.0 - 2026-10-18
 
 - **Breaking:** no longer exports `LOG_TYPES`, `requestLogLevel` and the `RequestLogLevel` type. No consumer imported

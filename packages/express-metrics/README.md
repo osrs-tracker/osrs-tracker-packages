@@ -1,6 +1,6 @@
 # @osrs-tracker/express-metrics &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/express-metrics.svg)](https://www.npmjs.com/package/@osrs-tracker/express-metrics) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-packages.svg)](https://github.com/osrs-tracker/osrs-tracker-packages/blob/main/LICENSE)
 
-Prometheus HTTP metrics for the Express 5 apps of [OSRS Tracker](https://osrs-tracker.freekmencke.com), on
+Prometheus HTTP metrics for the Express 5 apps of [OSRS Tracker](https://osrs-tracker.net), on
 [`@prometheus-io/client`](https://www.npmjs.com/package/@prometheus-io/client) (the successor of `prom-client`). It
 replaces `express-prom-bundle` and keeps its series unchanged:
 

@@ -1,3 +1,8 @@
+## Unreleased
+
+- The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
+  osrs-tracker/osrs-tracker-packages#19).
+
 ## 3.2.0 - 2026-10-21
 
 - `ScrapeResultMessage` (`HiscoresResultMessage` or `PlayerCountResultMessage`, with `ScrapedHiscore`): what the

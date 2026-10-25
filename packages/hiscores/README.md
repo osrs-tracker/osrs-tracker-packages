@@ -1,9 +1,9 @@
 # @osrs-tracker/hiscores &middot; [![NPM package](https://img.shields.io/npm/v/@osrs-tracker/hiscores.svg)](https://www.npmjs.com/package/@osrs-tracker/hiscores) [![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-packages.svg)](https://github.com/osrs-tracker/osrs-tracker-packages/blob/main/LICENSE)
 
-Helpers for Old School RuneScape hiscores in [OSRS Tracker](https://osrs-tracker.freekmencke.com): a client for Jagex's
-JSON hiscores, the mapping from Jagex's JSON to the domain model (`HiscoreEntry` in `@osrs-tracker/models`), and
-comparing two hiscore snapshots, plus a client for Jagex's world list that counts the players online. Import the skill
-and activity names (`SkillEnum`, `ActivityEnum`) and the XP helpers from `@osrs-tracker/models`.
+Helpers for Old School RuneScape hiscores in [OSRS Tracker](https://osrs-tracker.net): a client for Jagex's JSON
+hiscores, the mapping from Jagex's JSON to the domain model (`HiscoreEntry` in `@osrs-tracker/models`), and comparing
+two hiscore snapshots, plus a client for Jagex's world list that counts the players online. Import the skill and
+activity names (`SkillEnum`, `ActivityEnum`) and the XP helpers from `@osrs-tracker/models`.
 
 A `HiscoreEntry` keys `skills` and `activities` by name. A value is `{ rank, level, xp }` / `{ rank, score }` with
 `rank: null` when unranked (below Jagex's ranking cut-off) but with xp or a score, `null` when there's no xp or score,

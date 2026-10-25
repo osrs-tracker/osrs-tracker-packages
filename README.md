@@ -1,6 +1,6 @@
 # OSRS Tracker packages
 
-The npm packages shared by [OSRS Tracker](https://osrs-tracker.freekmencke.com)'s website
+The npm packages shared by [OSRS Tracker](https://osrs-tracker.net)'s website
 ([osrs-tracker-web](https://github.com/osrs-tracker/osrs-tracker-web)), its
 [API](https://github.com/osrs-tracker/osrs-tracker-api) and its background jobs
 ([osrs-tracker-aws](https://github.com/osrs-tracker/osrs-tracker-aws)). Each one lives in `packages/<name>/` with its

@@ -4,6 +4,11 @@ Changes to CI, tooling and the repo itself. Package changes are logged in each p
 `packages/<name>/CHANGELOG.md`. Housekeeping (tooling, CI) is logged on purpose, because sessions read this as the
 repo's history; doc-only changes are not.
 
+## 2026-10-25
+
+- The root `NOTICE` links the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
+  osrs-tracker/osrs-tracker-packages#19).
+
 ## 2026-10-18
 
 - Publishing: a `Publish` workflow, run by hand from `main`, stages a package's version on npm with trusted publishing

@@ -1,3 +1,8 @@
+## Unreleased
+
+- The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
+  osrs-tracker/osrs-tracker-packages#19).
+
 ## 0.2.0 - 2026-10-18
 
 - **Breaking:** no longer re-exports `Histogram` and `Summary` from `@prometheus-io/client`. No consumer imported them
