@@ -1,5 +1,10 @@
-## Unreleased
+## 3.3.0 - 2026-10-25
 
+- `Item.addedAt` and `Item.updatedAt`, both optional: when the item first appeared in the OSRS Wiki's item list, and
+  when osrs-tracker-api's ingester last changed its Wiki fields (its add included). For the web's "New on the GE" list
+  and its sitemap's `<lastmod>` on item pages, since item ids aren't a reliable "added" order (roadmap
+  osrs-tracker/osrs-tracker-web#443, issue osrs-tracker/osrs-tracker-packages#18). Optional because items stored before
+  the ingester writes them lack them, and they aren't backfilled.
 - The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
   osrs-tracker/osrs-tracker-packages#19).
 
