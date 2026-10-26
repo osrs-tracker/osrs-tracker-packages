@@ -60,6 +60,11 @@ jobs:
       - name: knip
         run: npm run knip
 
+      # Copy-pasted code in packages/ (.jscpd.json): fails when more than 1% of the lines are duplicated, the specs left
+      # out
+      - name: jscpd
+        run: npm run jscpd
+
       # The root scripts run every package in workspace order: hiscores builds and type-checks against the local
       # models, whose exports point at dist/, so models is built first
       - name: Lint

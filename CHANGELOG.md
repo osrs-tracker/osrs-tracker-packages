@@ -4,6 +4,12 @@ Changes to CI, tooling and the repo itself. Package changes are logged in each p
 `packages/<name>/CHANGELOG.md`. Housekeeping (tooling, CI) is logged on purpose, because sessions read this as the
 repo's history; doc-only changes are not.
 
+## 2026-10-26
+
+- CI checks for copied and circular code: jscpd (copy-pasted code in `packages/`, failing over 1% duplicated lines,
+  `.jscpd.json`) runs after knip in CI and in the verify skill, and oxlint's `import/no-cycle` fails a package's lint on
+  a circular import.
+
 ## 2026-10-25
 
 - The root `NOTICE` links the OSRS Tracker website at its new address, https://osrs-tracker.net (issue

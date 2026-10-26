@@ -1,0 +1,7 @@
+{
+  "path": ["packages"],
+  "format": ["typescript"],
+  "ignore": ["**/*.spec.ts"],
+  "threshold": 1,
+  "reporters": ["console"]
+}

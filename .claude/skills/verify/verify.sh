@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Runs every verify check: the root Prettier and knip checks, and lint, build, type check and tests for every package in
-# the workspace, all at once (none stops at another's failure). Only a package that builds against the local models
-# (hiscores) waits, for models' build. Then prints each failed check's log and a summary line per check. Exits 1 when
-# any check failed. Run from the checkout's root; it takes no options.
+# Runs every verify check: the root Prettier, knip and jscpd checks, and lint, build, type check and tests for every
+# package in the workspace, all at once (none stops at another's failure). Only a package that builds against the local
+# models (hiscores) waits, for models' build. Then prints each failed check's log and a summary line per check. Exits 1
+# when any check failed. Run from the checkout's root; it takes no options.
 set -u
 # Plain output: the logs are read by Claude, not a terminal
 export NO_COLOR=1 FORCE_COLOR=0
@@ -20,6 +20,8 @@ add() { names+=("$1") dirs+=("$2") commands+=("$3") waits+=("${4:-}"); }
 add prettier . 'npm run prettier:ci'
 # Unused files, dependencies and internal exports (knip.jsonc); the packages' public exports count as used
 add knip . 'npm run knip'
+# Copy-pasted code in packages/ (.jscpd.json), the specs left out: fails over 1% duplicated lines
+add jscpd . 'npm run jscpd'
 
 # The workspace order in the root package.json: models, hiscores, logger, express-metrics. Every check runs from the
 # root: Vitest's projects are in the root vitest.config.mts

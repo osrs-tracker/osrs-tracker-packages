@@ -15,10 +15,10 @@ here.** It holds the versioning, publishing, changelog, review and release rules
   install covers all four packages (the pre-push hook needs it too).
 - From the root, every package in workspace order: `npm run lint`, `npm run build`, `npm run typecheck` (the specs'
   `tsconfig.spec.json`, in `hiscores` and `models`), `npm test` (`vitest run`, one Vitest project per package in the
-  root `vitest.config.mts`), `npm run knip` (unused files, dependencies and internal exports), `npm run prettier:ci`.
-  One package: `-w packages/<name>` on the npm scripts, `npx vitest run --project <name>`. Build `models` first:
-  `hiscores` builds and type-checks against the local `models`, whose `exports` point at `dist/`. models'
-  `*.int.spec.ts` tests start an in-memory MongoDB 8.0.
+  root `vitest.config.mts`), `npm run knip` (unused files, dependencies and internal exports), `npm run jscpd`
+  (copy-pasted code, `.jscpd.json`), `npm run prettier:ci`. One package: `-w packages/<name>` on the npm scripts,
+  `npx vitest run --project <name>`. Build `models` first: `hiscores` builds and type-checks against the local `models`,
+  whose `exports` point at `dist/`. models' `*.int.spec.ts` tests start an in-memory MongoDB 8.0.
 - The `verify` skill's `.claude/skills/verify/verify.sh` runs all of these for every package at once, in one call;
   Claude Code runs it before each commit.
 
@@ -45,8 +45,9 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 - Root `package.json`: the workspace (in the order `models`, `hiscores`, `logger`, `express-metrics`) and the shared
   devDependencies, and the scripts that run every package; a package's own dependencies are in its `package.json`.
   Shared by every package: `tsconfig.base.json` (each package's `tsconfig.json` extends it), `scripts/build-package.sh`
-  (every `build`), `vitest.config.mts` (one project per package), `knip.jsonc` and `.oxlintrc.json` (the lint config;
-  oxlint until typescript-eslint supports TypeScript 7, osrs-tracker/osrs-tracker-packages#9).
+  (every `build`), `vitest.config.mts` (one project per package), `knip.jsonc`, `.jscpd.json` and `.oxlintrc.json` (the
+  lint config, `import/no-cycle` included; oxlint until typescript-eslint supports TypeScript 7,
+  osrs-tracker/osrs-tracker-packages#9).
 - osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
   writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
   encoding.
