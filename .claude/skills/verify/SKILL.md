@@ -1,8 +1,8 @@
 ---
 name: verify
 description:
-  Runs osrs-tracker-packages' verify checks (prettier, lint, type check, build, tests) for every package and reports
-  each one's result. Use right before a commit, and whenever asked to verify the repo.
+  Runs osrs-tracker-packages' verify checks (prettier, knip, jscpd, lint, type check, build, tests) for every package
+  and reports each one's result. Use right before a commit, and whenever asked to verify the repo.
 ---
 
 # verify
@@ -20,7 +20,8 @@ workspace, so one install covers every package).
 
 It then runs every check at once (about 4 s), never stopping at a failure:
 
-1. Repo root: `npm run prettier:ci` and `npm run knip`
+1. Repo root: `npm run prettier:ci`, `npm run knip` and `npm run jscpd` (copy-pasted code in `packages/`, specs left
+   out; fails over 1% duplicated lines, `.jscpd.json`)
 2. Each package in `packages/`: `npm run lint -w packages/<name>`, as its own check
 3. `models`: `npm run build -w packages/models`, and on its own `npm run typecheck -w packages/models` and
    `npx vitest run --project models` (its `*.int.spec.ts` tests start an in-memory MongoDB 8.0)
@@ -41,5 +42,6 @@ line per check with its folder, command and seconds, and exits 1 when any failed
 One line per check: folder, command, passed or failed, quoting the relevant errors for each failure. Never claim a pass
 without the script's output. Fix every failure in one round, then run the script again: `npm run prettier` and
 `npm run lint -w packages/<name> -- --fix` fix what they can; fix the rest by hand. When `models build` fails, fix it
-first: `hiscores` fails with it. Don't commit while a check fails, and don't drop a check to save time: the push gate
-covers only lint and Prettier.
+first: `hiscores` fails with it. A jscpd finding: move the copied code into one place, never raise the threshold to
+pass. Don't commit while a check fails, and don't drop a check to save time: the push gate covers only lint and
+Prettier.

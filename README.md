@@ -38,8 +38,8 @@ npm test
 
 Each runs every package, in workspace order (`models` first: `hiscores` builds against it). `npm test` runs one Vitest
 project per package; `npx vitest run --project models` runs one. `models`' `*.int.spec.ts` tests start an in-memory
-MongoDB 8.0. `npm run knip` reports unused files, dependencies and internal exports, and `npm run prettier:ci` checks
-the formatting.
+MongoDB 8.0. `npm run knip` reports unused files, dependencies and internal exports, `npm run jscpd` copy-pasted code,
+and `npm run prettier:ci` checks the formatting.
 
 ## License
 
