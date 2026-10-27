@@ -51,11 +51,11 @@ here.** It holds the versioning, publishing, changelog, review and release rules
 - osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
   writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
   encoding.
-- `.github/workflows/main.yml`: CI checks every package on every push to `main` and every PR (lint, tests, type check,
-  build, and a load check that packs each package and loads it with `require` and `import`), plus Prettier and an
-  offline link check, after one `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s `zizmor`
-  (audits the workflows; `.github/zizmor.yml` says what it allows). `publish.yml` (run by hand) stages one package on
-  npm with trusted publishing.
+- `.github/workflows/main.yml`: CI checks every package on every push to `main` and every PR (lint, knip, jscpd, tests,
+  type check, build, and a load check that packs each package and loads it with `require` and `import`), plus Prettier
+  and an offline link check, after one `npm ci` at the root. Its `CI` job is a required check, with `zizmor.yml`'s
+  `zizmor` (audits the workflows; `.github/zizmor.yml` says what it allows). `publish.yml` (run by hand) stages one
+  package on npm with trusted publishing.
 - `.claude/agents/conventions-reviewer.md` reviews diffs against the skill and this file;
   `.claude/hooks/read-only-bash.sh` keeps it to git, gh and grep reads. `.claude/settings.json` runs Prettier on every
   file Claude edits, and `.claude/hooks/pre-push-check.sh` blocks `git push` (also `git -C <path> push`) when Prettier

@@ -24,7 +24,8 @@ function describe(player: Player): string {
 ### Stored hiscore entries
 
 Entries are stored by position in a layout (the skill and activity names Jagex used), and a value that didn't change
-since the entry before is stored as its bare rank. Writers encode and prepend; readers load the layouts and decode:
+since the entry before is stored as its bare rank. A stored document is a `StoredPlayer`, whose `hiscoreEntries` are
+`StoredHiscoreEntry[]`; `Player` has them decoded. Writers encode and prepend; readers load the layouts and decode:
 
 ```ts
 import {
@@ -33,18 +34,24 @@ import {
   encodeHiscoreEntry,
   hiscoreEntriesWriteExpression,
   hiscoreLayoutIds,
+  type StoredPlayer,
 } from '@osrs-tracker/models';
 
+const players = db.collection<StoredPlayer>('players');
+
+// `names`: the skill and activity names in Jagex's order, e.g. `result.layout` from `getHiscore` in
+// @osrs-tracker/hiscores
 const layout = createHiscoreLayout(names, new Date()); // upsert it in `hiscoreLayouts` before the entry
 await players.updateOne({ username }, [
   { $set: { hiscoreEntries: hiscoreEntriesWriteExpression(encodeHiscoreEntry(entry, layout)) } },
 ]);
 
+const storedEntries = (await players.findOne({ username }))?.hiscoreEntries ?? [];
 // The layouts the entries use, in order of first use
-const ids = hiscoreLayoutIds(player.hiscoreEntries);
+const ids = hiscoreLayoutIds(storedEntries);
 const layouts = await hiscoreLayouts.find({ _id: { $in: ids } }).toArray();
 const layoutsById = new Map(layouts.map((layout) => [layout._id, layout]));
-const entries = decodeHiscoreEntries(player.hiscoreEntries, layoutsById); // newest first, as stored
+const entries = decodeHiscoreEntries(storedEntries, layoutsById); // newest first, as stored
 ```
 
 `decodeHiscoreEntries` throws an `UnknownHiscoreLayoutError` for a layout id missing from the map: load that layout and

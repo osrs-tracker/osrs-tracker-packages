@@ -105,8 +105,8 @@ Wait for a 200 from `https://registry.npmjs.org/@osrs-tracker%2f<pkg>/<version>`
 
 ## Verify
 
-The `verify` skill runs all of this at once for every package. By hand, from the root after `npm ci` once there:
-`npm run lint && npm run build && npm run typecheck && npm test && npm run knip && npm run prettier:ci`. Each runs every
+The `verify` skill runs all of this at once for every package. By hand: every command in `CLAUDE.md`'s `## Commands`,
+from the root after `npm ci` once there; CI runs each of them, so skipping one locally can fail CI. Each runs every
 package in workspace order; for one, pass `-w packages/<name>` to the npm scripts and use
 `npx vitest run --project <name>`.
 
@@ -119,8 +119,7 @@ package in workspace order; for one, pass `-w packages/<name>` to the npm script
   `src/index.ts` exports as used, so it doesn't flag public exports no consumer imports: check those against the
   consumers' code before removing one.
 
-CI checks every package on every push to `main` and every PR: the same root scripts, and a load check that packs each
-package and loads it with `require` and `import`; plus Prettier and an offline link check.
+What CI checks, and on which events, is in `CLAUDE.md` (`.github/workflows/main.yml` under "Where things live").
 
 ## Review rules
 
@@ -183,5 +182,5 @@ that CI is the gate (the build a publish runs still runs).
   When adding an entry, reread the whole day: add subtitles once it's busy, and merge entries about the same feature.
 - GPG "Inappropriate ioctl for device": ask the user to run `echo test | gpg --clearsign > /dev/null` in their terminal.
   Never use `--no-gpg-sign`.
-- `gh pr edit` can fail on a Projects (classic) error; use
-  `gh api -X PATCH repos/osrs-tracker/osrs-tracker-packages/pulls/<n> -F body=@<file>`.
+- `gh pr edit` fails on a Projects (classic) error with gh older than 2.82.1, and in cloud sessions, which block
+  GraphQL; there, use `gh api -X PATCH repos/osrs-tracker/osrs-tracker-packages/pulls/<n> -F body=@<file>`.
