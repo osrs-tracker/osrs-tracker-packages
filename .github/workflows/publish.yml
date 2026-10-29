@@ -34,11 +34,11 @@ jobs:
         with:
           persist-credentials: false
 
-      # Node 24 ships npm 11.15.0 or later, which `npm stage` needs
+      # Node 26 ships npm 11.20.0 or later, which `npm stage` needs
       - name: Set up Node
         uses: actions/setup-node@v7
         with:
-          node-version: '24.x'
+          node-version: '26.x'
           registry-url: https://registry.npmjs.org
           # No cache in a job that can publish: a poisoned cache would ship in the tarball
           package-manager-cache: false
