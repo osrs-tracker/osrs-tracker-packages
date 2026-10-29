@@ -30,7 +30,7 @@
     "prettier:ci": "prettier --check ."
   },
   "devDependencies": {
-    "@types/node": "^24.19.1",
+    "@types/node": "^26.6.6",
     "jscpd": "^5.4.2",
     "knip": "^6.41.0",
     "oxlint": "^1.88.0",

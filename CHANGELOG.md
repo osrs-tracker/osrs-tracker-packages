@@ -4,6 +4,13 @@ Changes to CI, tooling and the repo itself. Package changes are logged in each p
 `packages/<name>/CHANGELOG.md`. Housekeeping (tooling, CI) is logged on purpose, because sessions read this as the
 repo's history; doc-only changes are not.
 
+## 2026-10-29
+
+- CI runs on Node 26 LTS (`main.yml`, `publish.yml`; Node 26 bundles npm 11.20.0, which has `npm stage`), and the shared
+  `@types/node` devDependency moves to `^26.6.6` (issue osrs-tracker/osrs-tracker-packages#22). `@types/node` 26 removes
+  `TransferListItem`, which pino's `thread-stream` 4.2.0 still declares, so logger's `tsconfig.json` sets `skipLibCheck`
+  (as the specs' configs already do).
+
 ## 2026-10-26
 
 - CI checks for copied and circular code: jscpd (copy-pasted code in `packages/`, failing over 1% duplicated lines,
