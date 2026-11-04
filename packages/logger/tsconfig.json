@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "types": ["node"],
-    // thread-stream 4.2.0 (pino's) declares `workerThreads.TransferListItem`, which @types/node 26 removed
-    "skipLibCheck": true
+    "types": ["node"]
   }
 }
