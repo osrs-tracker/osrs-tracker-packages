@@ -4,6 +4,11 @@ Changes to CI, tooling and the repo itself. Package changes are logged in each p
 `packages/<name>/CHANGELOG.md`. Housekeeping (tooling, CI) is logged on purpose, because sessions read this as the
 repo's history; doc-only changes are not.
 
+## 2026-11-04
+
+- Logger's `tsconfig.json` no longer sets `skipLibCheck`: `thread-stream` 4.2.1 (pino's dependency, lockfile bump) no
+  longer declares `TransferListItem`, which `@types/node` 26 removed (issue osrs-tracker/osrs-tracker-packages#24).
+
 ## 2026-10-29
 
 - CI runs on Node 26 LTS (`main.yml`, `publish.yml`; Node 26 bundles npm 11.20.0, which has `npm stage`), and the shared
