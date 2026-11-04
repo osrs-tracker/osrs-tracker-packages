@@ -1,9 +1,13 @@
 import { HiscoreEntry, HiscoreLayoutNames } from './hiscores.js';
 import { PlayerCount } from './player-count.js';
+import { ScrapeTable } from './subscription.js';
 
+/** One process-players scrape job, from queue-players: these players at this offset, from one table. */
 export interface PlayerScrapeMessageBody {
   usernames: string[];
   scrapingOffset: number;
+  /** From the players' `PlayerSubscription.table`; absent means `hiscore_oldschool`. A requeued job keeps it. */
+  table?: ScrapeTable;
 }
 
 /**

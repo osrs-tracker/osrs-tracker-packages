@@ -8,4 +8,13 @@
 export interface PlayerSubscription {
   username: string;
   scrapingOffsets: Set<number>;
+  /** The hiscore table to scrape the player from; absent means `hiscore_oldschool`. Written by the ingester's sync. */
+  table?: ScrapeTable;
 }
+
+/**
+ * A hiscore table a player is scraped from, other than the default `hiscore_oldschool`. The ingester's sync writes it
+ * to `PlayerSubscription.table`, queue-players passes it on in `PlayerScrapeMessageBody.table`, and process-players
+ * fetches it.
+ */
+export type ScrapeTable = 'hiscore_oldschool_hardcore_mains';

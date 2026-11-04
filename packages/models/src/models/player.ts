@@ -5,6 +5,8 @@ export enum PlayerType {
   Ironman = 'ironman',
   Ultimate = 'ultimate',
   Hardcore = 'hardcore_ironman',
+  /** A Hardcore Worlds character, tracked from its own `hiscore_oldschool_hardcore_mains` table. */
+  HardcoreMain = 'hardcore_mains',
 }
 
 export enum PlayerStatus {
@@ -16,8 +18,16 @@ export enum PlayerStatus {
 export interface Player {
   username: string;
   combatLevel: number;
+  /**
+   * The account type, set by osrs-tracker-api on a lookup. Its value is the hiscore table's suffix: the web links to
+   * Jagex's hiscores as `hiscore_oldschool_` + `type` (`normal` uses `hiscore_oldschool`).
+   */
   type: PlayerType;
   status: PlayerStatus;
+  /**
+   * True for a hardcore ironman who died, set by osrs-tracker-api on a lookup: their hardcore table's total XP fell
+   * behind their ironman table's. Not a Hardcore main's death, whose table runs ahead of the main one.
+   */
   diedAsHardcore: boolean;
 
   /**

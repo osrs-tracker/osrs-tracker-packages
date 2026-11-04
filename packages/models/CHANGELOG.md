@@ -1,3 +1,18 @@
+## 3.4.0 - 2026-11-04
+
+- **Breaking:** `PlayerType.HardcoreMain` (`'hardcore_mains'`), a Hardcore Worlds character, tracked from its own
+  `hiscore_oldschool_hardcore_mains` table (roadmap osrs-tracker/osrs-tracker-web#496, issue
+  osrs-tracker/osrs-tracker-packages#27). Its value is the table's suffix, like the other types. A
+  `Record<PlayerType, …>` or exhaustive `switch` on `PlayerType` stops compiling until it handles the new member:
+  `TYPE_LABELS` in `account-tile.ts` and `HELMS` in `src/server/og/player-card.ts` in osrs-tracker-web, and
+  `PlayerUtils.getHiscoreTable` in osrs-tracker-api. Earlier enum additions shipped as minors (3.1.0); this one is a
+  minor too, labelled because it breaks those compiles.
+- `PlayerSubscription.table` and `PlayerScrapeMessageBody.table`, both optional, typed `ScrapeTable`
+  (`'hiscore_oldschool_hardcore_mains'`): which hiscore table to scrape a player from, absent meaning
+  `hiscore_oldschool`. osrs-tracker-api's ingester sync writes it, queue-players passes it on and process-players
+  fetches it. A string type rather than hiscores' `HiscoreTable`, so models keeps no dependency on hiscores.
+- Doc comments on `Player.type` and `Player.diedAsHardcore`.
+
 ## 3.3.0 - 2026-10-25
 
 - `Item.addedAt` and `Item.updatedAt`, both optional: when the item first appeared in the OSRS Wiki's item list, and

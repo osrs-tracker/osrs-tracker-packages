@@ -28,7 +28,7 @@ export type { PlayerCount } from './models/player-count.js';
 export type { PlayerCountDay } from './models/player-count-day.js';
 export { PLAYER_COUNT_RANGES } from './models/player-count-history.js';
 export type { PlayerCountPoint, PlayerCountRange } from './models/player-count-history.js';
-export type { PlayerSubscription } from './models/subscription.js';
+export type { PlayerSubscription, ScrapeTable } from './models/subscription.js';
 export { MAX_SKILL_LEVEL, calculateXPForSkillLevel, calculateXPToNextLevel } from './xp/levels.js';
 export {
   UnknownHiscoreLayoutError,
