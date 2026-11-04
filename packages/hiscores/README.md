@@ -40,14 +40,16 @@ const result = await getHiscore({ baseUrl: 'https://secure.runescape.com', usern
 if (result.status === 'found') {
   const entry = { date: new Date(), scrapingOffset: 0, ...result.hiscore }; // a HiscoreEntry
   console.log(entry.skills.Overall, result.layout.skills); // layout: the names in Jagex's order
+  if (result.diedAt) console.log(`Died at ${result.diedAt.toISOString()}`); // a dead hardcore player
 } else if (result.status === 'notFound')
   console.log('Not on the hiscores'); // HTTP 404/400, don't retry
 else console.log(`Failed: ${result.reason}`); // worth retrying
 ```
 
 Options: `table` (default `'hiscore_oldschool'`; `'hiscore_oldschool_ironman'`, `'hiscore_oldschool_ultimate'` or
-`'hiscore_oldschool_hardcore_ironman'` for the ironman tables), `fetch` (default the global `fetch`) and `timeoutMs`
-(default 10 seconds, after which the result is `failed`).
+`'hiscore_oldschool_hardcore_ironman'` for the ironman tables, `'hiscore_oldschool_hardcore_mains'` for Hardcore Worlds
+characters), `fetch` (default the global `fetch`) and `timeoutMs` (default 10 seconds, after which the result is
+`failed`).
 
 Already have Jagex's `index_lite.json` (typed `JagexHiscoreJson`), e.g. from a proxy? Map it the same way:
 

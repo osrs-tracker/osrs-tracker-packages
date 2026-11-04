@@ -41,6 +41,29 @@ describe('fromJagex', () => {
     });
   });
 
+  describe('diedAt', () => {
+    it("is Overall's death time for a dead hardcore player", () => {
+      // The `death` of a real dead hardcore ironman's lite JSON, minus its location.
+      const death = {
+        timeStamp: 1_670_857_144_138,
+        worldID: 327,
+        npcKiller: -1,
+        playerKiller: -1,
+        deathReason: -1,
+        language: 'EN',
+        locationDescription: '',
+        deathDescription: '',
+      };
+      const result = fromJagex({ name: 'zezima', skills: [{ ...overall, death }], activities: [] });
+      expect(result.diedAt).toEqual(new Date('2022-12-12T14:59:04.138Z'));
+      expect(result.skills['Overall']).toEqual({ rank: 100, level: 50, xp: 1000 });
+    });
+
+    it('is absent for a living player', () => {
+      expect(fromJagex(json([]))).not.toHaveProperty('diedAt');
+    });
+  });
+
   describe('activities', () => {
     it.each([
       ['ranked', { rank: 12, score: 40 }, { rank: 12, score: 40 }],

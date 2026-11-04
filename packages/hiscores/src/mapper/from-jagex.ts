@@ -1,7 +1,17 @@
 import { HiscoreEntry, HiscoreLayoutNames, SkillEnum } from '@osrs-tracker/models';
 
-/** A skill in Jagex's `index_lite.json`. `rank` and `xp` are `-1` when unranked or without xp. */
-export type JagexHiscoreSkill = { id: number; name: string; rank: number; level: number; xp: number };
+/**
+ * A skill in Jagex's `index_lite.json`. `rank` and `xp` are `-1` when unranked or without xp. A dead hardcore player's
+ * Overall has `death` (and more fields than typed here); a living player's has none.
+ */
+export type JagexHiscoreSkill = {
+  id: number;
+  name: string;
+  rank: number;
+  level: number;
+  xp: number;
+  death?: { timeStamp: number };
+};
 
 /** An activity in Jagex's `index_lite.json`. `rank` is `-1` when unranked, `score` `-1` or `0` without a score. */
 export type JagexHiscoreActivity = { id: number; name: string; rank: number; score: number };
@@ -19,6 +29,8 @@ export type MappedHiscore = {
   activities: HiscoreEntry['activities'];
   /** The names in Jagex's order, for `layoutId`/`createHiscoreLayout` in `@osrs-tracker/models`. */
   layout: HiscoreLayoutNames;
+  /** When a hardcore player died, from Overall's `death.timeStamp` (ms); absent while alive. */
+  diedAt?: Date;
 };
 
 /**
@@ -34,11 +46,14 @@ export function fromJagex(json: JagexHiscoreJson): MappedHiscore {
   const skills: HiscoreEntry['skills'] = {};
   const activities: HiscoreEntry['activities'] = {};
   const layout: HiscoreLayoutNames = { skills: [], activities: [] };
+  let diedAt: Date | undefined;
 
-  for (const { name, rank, level, xp } of json.skills) {
+  for (const { name, rank, level, xp, death } of json.skills) {
     layout.skills.push(name);
-    if (name === SkillEnum.Overall) skills[name] = { rank: toRank(rank), level, xp: Math.max(xp, 0) };
-    else skills[name] = xp > 0 ? { rank: toRank(rank), level, xp } : null;
+    if (name === SkillEnum.Overall) {
+      skills[name] = { rank: toRank(rank), level, xp: Math.max(xp, 0) };
+      if (typeof death?.timeStamp === 'number') diedAt = new Date(death.timeStamp);
+    } else skills[name] = xp > 0 ? { rank: toRank(rank), level, xp } : null;
   }
 
   for (const { name, rank, score } of json.activities) {
@@ -46,7 +61,7 @@ export function fromJagex(json: JagexHiscoreJson): MappedHiscore {
     activities[name] = score > 0 ? { rank: toRank(rank), score } : null;
   }
 
-  return { skills, activities, layout };
+  return { skills, activities, layout, ...(diedAt && { diedAt }) };
 }
 
 /** A real rank is never 0; Jagex sends `-1` for unranked. */

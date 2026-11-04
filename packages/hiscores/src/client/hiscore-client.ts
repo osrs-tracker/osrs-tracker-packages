@@ -1,16 +1,21 @@
 import { HiscoreEntry, HiscoreLayoutNames } from '@osrs-tracker/models';
 import { fromJagex, JagexHiscoreJson, MappedHiscore } from '../mapper/from-jagex.js';
 
-/** The hiscore tables a player can be on. Everyone is on `hiscore_oldschool`; ironmen are also on their own tables. */
+/**
+ * The hiscore tables a player can be on. Everyone is on `hiscore_oldschool`; ironmen are also on their own tables, and
+ * Hardcore Worlds characters on `hiscore_oldschool_hardcore_mains`, whose progress is independent of their main entry.
+ */
 export type HiscoreTable =
   | 'hiscore_oldschool'
   | 'hiscore_oldschool_ironman'
   | 'hiscore_oldschool_ultimate'
-  | 'hiscore_oldschool_hardcore_ironman';
+  | 'hiscore_oldschool_hardcore_ironman'
+  | 'hiscore_oldschool_hardcore_mains';
 
 /**
  * - `found`: the hiscore was fetched and mapped with {@link fromJagex}. Add `date` and `scrapingOffset` to `hiscore` for
  *   a `HiscoreEntry`; `layout` is its names in Jagex's order, for `layoutId`/`createHiscoreLayout` in models.
+ *   `diedAt` is when a hardcore player died, absent while alive.
  * - `notFound`: HTTP 404 (or 400 for an invalid name), the player is not on this table (renamed, banned, unranked or
  *   not that account type). Permanent, so don't retry.
  * - `failed`: other non-2xx, network error, timeout or unexpected body. Worth retrying; `reason` is for logging.
@@ -20,6 +25,7 @@ export type HiscoreResult =
       status: 'found';
       hiscore: Pick<HiscoreEntry, 'skills' | 'activities'>;
       layout: HiscoreLayoutNames;
+      diedAt?: Date;
     }
   | { status: 'notFound'; httpStatus: 400 | 404 }
   | { status: 'failed'; reason: string };
@@ -78,6 +84,7 @@ export async function getHiscore({
       status: 'found',
       hiscore: { skills: mapped.skills, activities: mapped.activities },
       layout: mapped.layout,
+      ...(mapped.diedAt && { diedAt: mapped.diedAt }),
     };
   } catch (error) {
     // Checked by name, not instanceof: the timeout's DOMException can come from another realm (e.g. node-fetch, Jest).

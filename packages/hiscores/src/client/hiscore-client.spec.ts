@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { JagexHiscoreJson } from '../mapper/from-jagex';
-import { getHiscore, HiscoreFetch } from './hiscore-client';
+import { getHiscore, HiscoreFetch, HiscoreTable } from './hiscore-client';
 
 const baseUrl = 'https://hiscores.example';
 
@@ -37,12 +37,30 @@ describe('getHiscore', () => {
     expect(fetch.mock.calls[0][0]).toBe(`${baseUrl}/m=hiscore_oldschool/index_lite.json?player=lynx%20titan`);
   });
 
-  it('uses the given table', async () => {
+  it.each<HiscoreTable>([
+    'hiscore_oldschool',
+    'hiscore_oldschool_ironman',
+    'hiscore_oldschool_ultimate',
+    'hiscore_oldschool_hardcore_ironman',
+    'hiscore_oldschool_hardcore_mains',
+  ])('uses the given table (%s)', async (table) => {
     const fetch = respond(200);
-    await getHiscore({ baseUrl, username: 'zezima', table: 'hiscore_oldschool_hardcore_ironman', fetch });
-    expect(fetch.mock.calls[0][0]).toBe(
-      `${baseUrl}/m=hiscore_oldschool_hardcore_ironman/index_lite.json?player=zezima`,
-    );
+    await getHiscore({ baseUrl, username: 'zezima', table, fetch });
+    expect(fetch.mock.calls[0][0]).toBe(`${baseUrl}/m=${table}/index_lite.json?player=zezima`);
+  });
+
+  it("returns a dead hardcore player's death time as diedAt", async () => {
+    const dead: JagexHiscoreJson = {
+      ...hiscore,
+      skills: [{ ...hiscore.skills[0], death: { timeStamp: 1_670_857_144_138 } }],
+    };
+    const result = await getHiscore({ baseUrl, username: 'lynx titan', fetch: respond(200, dead) });
+    expect(result).toMatchObject({ status: 'found', diedAt: new Date('2022-12-12T14:59:04.138Z') });
+  });
+
+  it('returns no diedAt for a living player', async () => {
+    const result = await getHiscore({ baseUrl, username: 'lynx titan', fetch: respond(200) });
+    expect(result).not.toHaveProperty('diedAt');
   });
 
   it('sends no-cache and a timeout signal', async () => {

@@ -1,5 +1,10 @@
-## Unreleased
+## 6.1.0 - 2026-11-04
 
+- `HiscoreTable` takes `'hiscore_oldschool_hardcore_mains'`, the Hardcore Worlds table (roadmap
+  osrs-tracker/osrs-tracker-web#496, issue osrs-tracker/osrs-tracker-packages#27). Its characters' progress is
+  independent of their main entry, which stays a stub.
+- `getHiscore`'s `found` result and `fromJagex` have `diedAt`, when a dead hardcore player died, from the `death` record
+  Jagex adds to Overall (`death.timeStamp`, ms; `JagexHiscoreSkill.death`). Absent while alive.
 - The README and `NOTICE` link the OSRS Tracker website at its new address, https://osrs-tracker.net (issue
   osrs-tracker/osrs-tracker-packages#19).
 
