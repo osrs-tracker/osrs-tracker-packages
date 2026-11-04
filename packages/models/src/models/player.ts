@@ -5,7 +5,10 @@ export enum PlayerType {
   Ironman = 'ironman',
   Ultimate = 'ultimate',
   Hardcore = 'hardcore_ironman',
-  /** A Hardcore Worlds character, tracked from its own `hiscore_oldschool_hardcore_mains` table. */
+  /**
+   * A Hardcore Worlds character, tracked from its own `hiscore_oldschool_hardcore_mains` table. After a death, a
+   * Transfer to the main game makes it `normal`, with `diedAsHardcore` kept true.
+   */
   HardcoreMain = 'hardcore_mains',
 }
 
@@ -25,8 +28,12 @@ export interface Player {
   type: PlayerType;
   status: PlayerStatus;
   /**
-   * True for a hardcore ironman who died, set by osrs-tracker-api on a lookup: their hardcore table's total XP fell
-   * behind their ironman table's. Not a Hardcore main's death, whose table runs ahead of the main one.
+   * True when a hardcore player died, set by osrs-tracker-api on a lookup from Jagex's death record (hiscores'
+   * `diedAt`). By `type`:
+   * - `hardcore_ironman`: died; read from the hardcore table on each lookup.
+   * - `hardcore_mains`: died on Hardcore Worlds and hasn't picked a Reset or a Transfer yet. Read on each lookup, so a
+   *   Reset that brings the character back alive clears it.
+   * - `normal`: a Hardcore Worlds character that died and transferred to the main game. Never cleared.
    */
   diedAsHardcore: boolean;
 

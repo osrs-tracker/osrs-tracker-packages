@@ -1,3 +1,11 @@
+## 3.4.1 - 2026-11-04
+
+- Doc comments only: `Player.diedAsHardcore` now says what osrs-tracker-api sets it from, Jagex's death record
+  (hiscores' `diedAt`) on each lookup, and what it means for each `type`. That covers a hardcore ironman, a Hardcore
+  main that died and hasn't picked a Reset or a Transfer yet, and a `normal` player that transferred from Hardcore
+  Worlds and keeps it (osrs-tracker/osrs-tracker-api#249 and osrs-tracker/osrs-tracker-api#251, issue
+  osrs-tracker/osrs-tracker-packages#29). `PlayerType.HardcoreMain` notes that a Transfer makes the player `normal`.
+
 ## 3.4.0 - 2026-11-04
 
 - **Breaking:** `PlayerType.HardcoreMain` (`'hardcore_mains'`), a Hardcore Worlds character, tracked from its own
