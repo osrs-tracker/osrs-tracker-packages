@@ -28,7 +28,7 @@ They are the only source of rules; don't apply generic style preferences for the
    commits) apply only when the diff touches what they describe. Its `## Review rules` section lists the rules that span
    files, the extra files to read and what counts as **breaks** in this repo.
 2. `CLAUDE.md`, already in your context: its hard rules apply like the skill's.
-3. The files `## Review rules` tells you to read (osrs-tracker-aws's DATA-MODEL.md). Never flag something they explain.
+3. The files `## Review rules` tells you to read (osrs-tracker-api's DATA-MODEL.md). Never flag something they explain.
 
 ## Scope
 

@@ -58,7 +58,7 @@ const entries = decodeHiscoreEntries(storedEntries, layoutsById); // newest firs
 decode again.
 
 This package defines the encoding. Which job writes which `players` and `hiscoreLayouts` field, and owns which index, is
-in osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md).
+in osrs-tracker-api's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md).
 
 ### Reading entries
 

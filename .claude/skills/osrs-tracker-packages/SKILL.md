@@ -15,10 +15,10 @@ Four npm packages in `packages/<name>/`, one npm workspace with one root lockfil
 
 **This repo is public.** `CLAUDE.md`'s hard rules say what never goes into code, docs, issues or commits.
 
-Load when needed: osrs-tracker-aws's
-[DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md) (who writes which
+Load when needed: osrs-tracker-api's
+[DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md) (who writes which
 `players`/`items`/`hiscoreLayouts` field and owns which index, the stored hiscore format). It stays there: `models`
-defines the encoding, osrs-tracker-aws documents who writes it. The `conventions-reviewer` agent reviews diffs against
+defines the encoding, osrs-tracker-api documents who writes it. The `conventions-reviewer` agent reviews diffs against
 this file at runtime, so keep rules here, not in the agent; repo-specific review rules go in `## Review rules`.
 
 ## Rules
@@ -49,10 +49,10 @@ release a models minor. Consumers import the enums from models (hiscores re-expo
 
 `encodeHiscoreEntry`, `decodeHiscoreEntries`, `hiscoreEntriesWriteExpression` and `layoutId` in `models` define what's
 stored in `players.hiscoreEntries` and `hiscoreLayouts`
-([DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md)). A change that existing
+([DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md)). A change that existing
 entries can't be decoded with isn't a normal release: it needs a migration and every writer and reader switched
 together, like roadmap osrs-tracker/osrs-tracker-aws#52, and an update to DATA-MODEL.md through an issue in
-osrs-tracker-aws.
+osrs-tracker-api.
 
 ## Versioning
 
@@ -126,10 +126,10 @@ What CI checks, and on which events, is in `CLAUDE.md` (`.github/workflows/main.
 What `conventions-reviewer` checks beyond the rules above. It reads this section; keep repo rules here, not in the
 agent.
 
-- Read [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md) when the diff changes
+- Read [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md) when the diff changes
   the stored hiscore format (`encodeHiscoreEntry`, `decodeHiscoreEntries`, `hiscoreEntriesWriteExpression`, `layoutId`)
   or the type of a stored document in `models`: the change must still match it, or come with an issue in
-  osrs-tracker-aws. Read it from the sibling checkout with `git -C <osrs-tracker-aws> show origin/main:DATA-MODEL.md`;
+  osrs-tracker-api. Read it from the sibling checkout with `git -C <osrs-tracker-api> show origin/main:DATA-MODEL.md`;
   when there is none, make it a **check**.
 - Rules that span files, checked against the whole diff: a change and its `CHANGELOG.md` entry (root or the package's),
   except where `CLAUDE.md` exempts it; a package change that breaks a consumer and its `**Breaking:**` entry (a removed

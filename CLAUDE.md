@@ -48,7 +48,7 @@ here.** It holds the versioning, publishing, changelog, review and release rules
   (every `build`), `vitest.config.mts` (one project per package), `knip.jsonc`, `.jscpd.json` and `.oxlintrc.json` (the
   lint config, `import/no-cycle` included; oxlint until typescript-eslint supports TypeScript 7,
   osrs-tracker/osrs-tracker-packages#9).
-- osrs-tracker-aws's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md): who
+- osrs-tracker-api's [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md): who
   writes each stored field and owns each index, and the stored hiscore format. It stays there; `models` defines the
   encoding.
 - `.github/workflows/main.yml`: CI checks every package on every push to `main` and every PR (lint, knip, jscpd, tests,

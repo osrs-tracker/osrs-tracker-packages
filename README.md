@@ -18,8 +18,8 @@ own README, changelog and version, and is published to npm on its own.
 - `hiscores` has `models` as a peer dependency: it maps Jagex's hiscores to `models`' types, and consumers install both.
   In this repo `hiscores` builds and tests against the local `models`, so build `models` first.
 - `express-metrics` and `logger` stand alone, with no `@osrs-tracker/*` dependencies. The Lambdas use neither.
-- Which job writes which MongoDB field, and how the data `models` describes is stored, is in osrs-tracker-aws's
-  [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-aws/blob/main/DATA-MODEL.md).
+- Which job writes which MongoDB field, and how the data `models` describes is stored, is in osrs-tracker-api's
+  [DATA-MODEL.md](https://github.com/osrs-tracker/osrs-tracker-api/blob/main/DATA-MODEL.md).
 
 The packages moved here from osrs-tracker-aws on 2026-10-18, with their history (roadmap
 osrs-tracker/osrs-tracker-aws#154).
