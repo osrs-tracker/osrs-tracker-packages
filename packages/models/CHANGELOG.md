@@ -1,3 +1,9 @@
+## 3.5.0 - 2026-11-19
+
+- `Item.lastFetchHardcore`, optional: when the item was last looked up on Hardcore Worlds, which has its own Grand
+  Exchange. osrs-tracker-api stores it next to `lastFetch` and lists it from `GET /items?sort=lookedUp&world=hardcore`
+  (osrs-tracker/osrs-tracker-api#262, issue osrs-tracker/osrs-tracker-packages#32).
+
 ## 3.4.1 - 2026-11-04
 
 - Doc comments only: `Player.diedAsHardcore` now says what osrs-tracker-api sets it from, Jagex's death record

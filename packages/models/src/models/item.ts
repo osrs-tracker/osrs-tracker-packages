@@ -17,6 +17,12 @@ export interface Item {
   lastFetch?: Date;
 
   /**
+   * Last time the detail was fetched for this item on Hardcore Worlds, which has its own Grand Exchange. osrs-tracker-api
+   * sets it instead of `lastFetch` for a Hardcore Worlds lookup.
+   */
+  lastFetchHardcore?: Date;
+
+  /**
    * When the item first appeared in the OSRS Wiki's item list, as stored by osrs-tracker-api's ingester. Absent on items
    * stored before the ingester wrote it (not backfilled).
    */
