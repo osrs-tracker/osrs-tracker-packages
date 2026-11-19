@@ -1,3 +1,14 @@
+## 3.6.0 - 2026-11-19
+
+- `PlayerCount.hardcore`, `PlayerCountDay.hardcore` and `PlayerCountPoint.hardcore`, optional: the players on Hardcore
+  Worlds (world type flag `0x800`), so the players-online statistics can show them apart (roadmap
+  osrs-tracker/osrs-tracker-web#540, issue osrs-tracker/osrs-tracker-packages#34). A subset of `total`, already inside
+  `members` and `f2p`, so `total = members + f2p` still holds. Absent means unknown, never 0: samples from before it was
+  recorded don't have it, and an hourly or daily bucket averages only the samples that have it, with no `hardcore` when
+  none has. `PlayerCountResultMessage.playerCount` gets it too.
+- Doc comment on `PlayerCountDay`: the days are recomputed by osrs-tracker-api's ingester after every sample it applies,
+  not by the record-player-count Lambda.
+
 ## 3.5.0 - 2026-11-19
 
 - `Item.lastFetchHardcore`, optional: when the item was last looked up on Hardcore Worlds, which has its own Grand

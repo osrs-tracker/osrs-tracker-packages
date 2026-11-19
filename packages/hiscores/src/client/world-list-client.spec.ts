@@ -5,6 +5,8 @@ import { fetchWorldList, parseWorldList, WORLD_LIST_URL, WorldListFetch } from '
 
 /** The world list response on 2026-10-13 12:55 UTC: 30,000 bytes, of which 14,617 payload. */
 const captured = new Uint8Array(readFileSync(join(__dirname, '../fixtures/world-list-2026-10-13.bin')));
+/** The world list response on 2026-11-19 15:15 UTC, after Hardcore Worlds launched: 30,000 bytes, 16,526 payload. */
+const capturedHardcore = new Uint8Array(readFileSync(join(__dirname, '../fixtures/world-list-2026-11-19.bin')));
 
 interface World {
   flags: number;
@@ -38,8 +40,38 @@ describe('parseWorldList', () => {
       total: 83817,
       members: 76766,
       f2p: 7051,
+      hardcore: 0, // before Hardcore Worlds launched
       worlds: 321,
       byLocation: { 0: 35100, 1: 20365, 3: 6089, 7: 18657, 8: 1078, 9: 595, 10: 1700, 12: 233 },
+    });
+  });
+
+  it('sums a captured response with Hardcore Worlds', () => {
+    // matches an independent parse: 32 worlds flagged 0x801 with 6,358 players and one 0x800 world with 1
+    expect(parseWorldList(capturedHardcore)).toEqual({
+      total: 92708,
+      members: 85423,
+      f2p: 7285,
+      hardcore: 6359,
+      worlds: 353,
+      byLocation: { 0: 46414, 1: 20849, 3: 3623, 7: 18089, 8: 1210, 9: 475, 10: 1794, 12: 254 },
+    });
+  });
+
+  it('counts Hardcore Worlds (0x800) inside members and F2P, not as a third bucket', () => {
+    const bytes = worldList([
+      { flags: 0x801, location: 0, players: 500 },
+      { flags: 0x800, location: 0, players: 20 },
+      { flags: 0x1, location: 0, players: 1000 },
+    ]);
+
+    expect(parseWorldList(bytes)).toEqual({
+      total: 1520,
+      members: 1500,
+      f2p: 20,
+      hardcore: 520,
+      worlds: 3,
+      byLocation: { 0: 1520 },
     });
   });
 
@@ -57,13 +89,21 @@ describe('parseWorldList', () => {
       total: 1500,
       members: 1200,
       f2p: 300,
+      hardcore: 0,
       worlds: 3,
       byLocation: { 0: 1500, 1: 0 },
     });
   });
 
   it('parses a list with no worlds, which the handler then rejects', () => {
-    expect(parseWorldList(worldList([]))).toEqual({ total: 0, members: 0, f2p: 0, worlds: 0, byLocation: {} });
+    expect(parseWorldList(worldList([]))).toEqual({
+      total: 0,
+      members: 0,
+      f2p: 0,
+      hardcore: 0,
+      worlds: 0,
+      byLocation: {},
+    });
   });
 
   it('throws when the payload size is larger than the response', () => {

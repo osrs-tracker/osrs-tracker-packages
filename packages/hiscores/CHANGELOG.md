@@ -1,3 +1,13 @@
+## 6.2.0 - 2026-11-19
+
+- **Breaking:** `parseWorldList` counts the players on Hardcore Worlds (world type flag `0x800`) and returns them as
+  `hardcore`, always a number (roadmap osrs-tracker/osrs-tracker-web#540, issue osrs-tracker/osrs-tracker-packages#34).
+  They stay inside `members` and `f2p`, so `total = members + f2p` still holds. `WorldListCounts` is now
+  `Omit<PlayerCount, 'date'> & { hardcore: number }`, so it holds with any models in the peer range, including those
+  without `PlayerCount.hardcore` (added in models 3.6.0). A minor, labelled because a hand-built `WorldListCounts` stops
+  compiling until it sets `hardcore`: the `counts` in record-player-count's `src/index.spec.ts` in osrs-tracker-aws.
+  Code that spreads the result into a `PlayerCount` sends `hardcore` along without a change.
+
 ## 6.1.0 - 2026-11-04
 
 - `HiscoreTable` takes `'hiscore_oldschool_hardcore_mains'`, the Hardcore Worlds table (roadmap

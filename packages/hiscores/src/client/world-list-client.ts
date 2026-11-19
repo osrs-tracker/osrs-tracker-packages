@@ -8,6 +8,8 @@ export const WORLD_LIST_URL = 'https://www.runescape.com/g=oldscape/slr.ws?order
 
 /** A world's type flag for a members world; any other world is free-to-play. */
 const MEMBERS_FLAG = 0x1;
+/** A world's type flag for a Hardcore World, members (`0x801`) or free-to-play (`0x800`). */
+const HARDCORE_FLAG = 0x800;
 
 /** The part of `fetch` {@link fetchWorldList} uses, so callers can pass global `fetch` or add their own agent. */
 export type WorldListFetch = (
@@ -24,8 +26,11 @@ export type FetchWorldListOptions = {
   userAgent?: string;
 };
 
-/** The players online summed over a world list: a `PlayerCount` without its `date`. */
-export type WorldListCounts = Omit<PlayerCount, 'date'>;
+/**
+ * The players online summed over a world list: a `PlayerCount` without its `date`. `hardcore` is required here, since
+ * the parser always counts it, and declared here too, so it holds with a models version from before the field.
+ */
+export type WorldListCounts = Omit<PlayerCount, 'date'> & { hardcore: number };
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 
@@ -56,7 +61,7 @@ export async function fetchWorldList({
  * uint16  world count
  * per world:
  *   uint16  world id
- *   int32   type flags (0x1 = members)
+ *   int32   type flags (0x1 = members, 0x800 = Hardcore World)
  *   cstring address   (null-terminated)
  *   cstring activity  (null-terminated)
  *   uint8   location
@@ -92,6 +97,7 @@ export function parseWorldList(bytes: Uint8Array): WorldListCounts {
 
   let members = 0;
   let f2p = 0;
+  let hardcore = 0;
   const byLocation: Record<string, number> = {};
 
   for (let i = 0; i < worlds; i++) {
@@ -103,10 +109,12 @@ export function parseWorldList(bytes: Uint8Array): WorldListCounts {
 
     if (flags & MEMBERS_FLAG) members += players;
     else f2p += players;
+    // a subset of members and F2P, not a third bucket, so total stays members + f2p
+    if (flags & HARDCORE_FLAG) hardcore += players;
     byLocation[location] = (byLocation[location] ?? 0) + players;
   }
 
   if (offset !== end) throw new Error(`World list has ${end - offset} bytes left after ${worlds} worlds`);
 
-  return { total: members + f2p, members, f2p, worlds, byLocation };
+  return { total: members + f2p, members, f2p, hardcore, worlds, byLocation };
 }

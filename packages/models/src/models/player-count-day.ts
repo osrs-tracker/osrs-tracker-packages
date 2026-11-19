@@ -2,8 +2,8 @@ import { PlayerCount } from './player-count.js';
 
 /**
  * The averages over one UTC day of `PlayerCount` samples. A `playerCountsDaily` document, recomputed from the samples
- * by the record-player-count Lambda on every run (normally only today's), so today's is partial. A day without samples
- * has no document.
+ * by osrs-tracker-api's ingester after every sample it applies, from that sample's UTC day on (normally only today's),
+ * so today's is partial. A day without samples has no document.
  *
  * Averages are rounded half to even (MongoDB's `$round`), so `members + f2p` can be one off `total`.
  */
@@ -17,6 +17,11 @@ export interface PlayerCountDay {
   members: number;
   /** The day's average `f2p`. */
   f2p: number;
+  /**
+   * The day's average `hardcore` (players on Hardcore Worlds, inside `members` and `f2p`), over the samples that have
+   * it. Absent when none has: unknown, not 0.
+   */
+  hardcore?: number;
 
   /**
    * The average players per location code (see `PlayerCount['byLocation']`), over the samples that have the code: a
