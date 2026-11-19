@@ -14,6 +14,11 @@ export interface PlayerCount {
   members: number;
   /** Players on free-to-play worlds. */
   f2p: number;
+  /**
+   * Players on Hardcore Worlds (type flag `0x800`): a subset of `total`, already counted in `members` and `f2p`. Absent
+   * on samples from before it was recorded, which means unknown, not 0.
+   */
+  hardcore?: number;
 
   /** Worlds in the list, online or not. */
   worlds: number;

@@ -67,7 +67,7 @@ when the response doesn't match the expected format. Don't poll it faster than o
 import { fetchWorldList, parseWorldList } from '@osrs-tracker/hiscores';
 
 const counts = parseWorldList(await fetchWorldList({ userAgent: 'github:me/my-app' }));
-const playerCount = { date: new Date(), ...counts }; // a PlayerCount: total, members, f2p, worlds, byLocation
+const playerCount = { date: new Date(), ...counts }; // a PlayerCount: total, members, f2p, hardcore, worlds, byLocation
 ```
 
 Options: `fetch` (default the global `fetch`), `timeoutMs` (default 10 seconds) and `userAgent` (not sent by default).

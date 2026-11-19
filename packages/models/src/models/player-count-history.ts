@@ -16,6 +16,11 @@ export interface PlayerCountPoint {
   total: number;
   members: number;
   f2p: number;
+  /**
+   * Players on Hardcore Worlds (`PlayerCount['hardcore']`); in a bucket, the average over the samples that have it.
+   * Absent on a sample from before it was recorded, or a bucket where none has it: unknown, not 0.
+   */
+  hardcore?: number;
   /** Players per raw location code (`PlayerCount['byLocation']`); in a bucket, the average per code. */
   byLocation: PlayerCount['byLocation'];
   /** Daily points only: the highest `total` sampled that day. */
